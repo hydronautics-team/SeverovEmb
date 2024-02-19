@@ -14,6 +14,8 @@ RM := rm -rf
 -include Middlewares/Third_Party/FreeRTOS/Source/CMSIS_RTOS/subdir.mk
 -include Middlewares/Third_Party/FreeRTOS/Source/subdir.mk
 -include Drivers/STM32F3xx_HAL_Driver/Src/subdir.mk
+-include Core/Startup/subdir.mk
+-include Core/Src/subdir.mk
 -include objects.mk
 
 ifneq ($(MAKECMDGOALS),clean)
@@ -36,34 +38,34 @@ $(wildcard ../makefile.init) \
 $(wildcard ../makefile.targets) \
 
 
-BUILD_ARTIFACT_NAME := SEVEROV2_EmbeddedControl
+BUILD_ARTIFACT_NAME := test
 BUILD_ARTIFACT_EXTENSION := elf
 BUILD_ARTIFACT_PREFIX :=
 BUILD_ARTIFACT := $(BUILD_ARTIFACT_PREFIX)$(BUILD_ARTIFACT_NAME)$(if $(BUILD_ARTIFACT_EXTENSION),.$(BUILD_ARTIFACT_EXTENSION),)
 
 # Add inputs and outputs from these tool invocations to the build variables 
 EXECUTABLES += \
-SEVEROV2_EmbeddedControl.elf \
+test.elf \
 
 MAP_FILES += \
-SEVEROV2_EmbeddedControl.map \
+test.map \
 
 SIZE_OUTPUT += \
 default.size.stdout \
 
 OBJDUMP_LIST += \
-SEVEROV2_EmbeddedControl.list \
+test.list \
 
 
 # All Target
 all: main-build
 
 # Main-build Target
-main-build: SEVEROV2_EmbeddedControl.elf secondary-outputs
+main-build: test.elf secondary-outputs
 
 # Tool invocations
-SEVEROV2_EmbeddedControl.elf SEVEROV2_EmbeddedControl.map: $(OBJS) $(USER_OBJS) C:\Users\Viktoria\Desktop\SEVEROV2_EmbeddedControl-dev\STM32F303VCTX_FLASH.ld makefile objects.list $(OPTIONAL_TOOL_DEPS)
-	arm-none-eabi-gcc -o "SEVEROV2_EmbeddedControl.elf" @"objects.list" $(USER_OBJS) $(LIBS) -mcpu=cortex-m4 -T"C:\Users\Viktoria\Desktop\SEVEROV2_EmbeddedControl-dev\STM32F303VCTX_FLASH.ld" --specs=nosys.specs -Wl,-Map="SEVEROV2_EmbeddedControl.map" -Wl,--gc-sections -static --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -Wl,--start-group -lc -lm -Wl,--end-group
+test.elf test.map: $(OBJS) $(USER_OBJS) C:\Users\Viktoria\STM32CubeIDE\workspace_1.14.1\test\STM32F303VCTX_FLASH.ld makefile objects.list $(OPTIONAL_TOOL_DEPS)
+	arm-none-eabi-gcc -o "test.elf" @"objects.list" $(USER_OBJS) $(LIBS) -mcpu=cortex-m4 -T"C:\Users\Viktoria\STM32CubeIDE\workspace_1.14.1\test\STM32F303VCTX_FLASH.ld" --specs=nosys.specs -Wl,-Map="test.map" -Wl,--gc-sections -static --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -Wl,--start-group -lc -lm -Wl,--end-group
 	@echo 'Finished building target: $@'
 	@echo ' '
 
@@ -72,14 +74,14 @@ default.size.stdout: $(EXECUTABLES) makefile objects.list $(OPTIONAL_TOOL_DEPS)
 	@echo 'Finished building: $@'
 	@echo ' '
 
-SEVEROV2_EmbeddedControl.list: $(EXECUTABLES) makefile objects.list $(OPTIONAL_TOOL_DEPS)
-	arm-none-eabi-objdump -h -S $(EXECUTABLES) > "SEVEROV2_EmbeddedControl.list"
+test.list: $(EXECUTABLES) makefile objects.list $(OPTIONAL_TOOL_DEPS)
+	arm-none-eabi-objdump -h -S $(EXECUTABLES) > "test.list"
 	@echo 'Finished building: $@'
 	@echo ' '
 
 # Other Targets
 clean:
-	-$(RM) SEVEROV2_EmbeddedControl.elf SEVEROV2_EmbeddedControl.list SEVEROV2_EmbeddedControl.map default.size.stdout
+	-$(RM) default.size.stdout test.elf test.list test.map
 	-@echo ' '
 
 secondary-outputs: $(SIZE_OUTPUT) $(OBJDUMP_LIST)

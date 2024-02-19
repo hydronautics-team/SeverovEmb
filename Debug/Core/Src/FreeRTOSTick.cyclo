@@ -1,0 +1,4 @@
+../Core/Src/FreeRTOSTick.c:3:10:fromMsToTick	1
+../Core/Src/FreeRTOSTick.c:8:10:fromSecToTick	1
+../Core/Src/FreeRTOSTick.c:12:7:fromTickToMs	1
+../Core/Src/FreeRTOSTick.c:16:7:fromTickToSec	1

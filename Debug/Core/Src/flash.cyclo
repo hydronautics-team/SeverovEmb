@@ -1,0 +1,5 @@
+../Core/Src/flash.c:5:6:flashErase	1
+../Core/Src/flash.c:19:6:flashReadSettings	2
+../Core/Src/flash.c:31:6:flashWriteSettings	2
+../Core/Src/flash.c:57:6:flashFillStructure	2
+../Core/Src/flash.c:91:6:flashReadStructure	3
