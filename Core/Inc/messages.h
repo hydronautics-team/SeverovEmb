@@ -112,7 +112,7 @@ struct devicesResponse_s
 
 #define SHORE_REQUEST_CODE             0xA5
 
-#define SHORE_REQUEST_LENGTH           30
+#define SHORE_REQUEST_LENGTH           34
 
 #define SHORE_STABILIZE_DEPTH_BIT       0
 #define SHORE_STABILIZE_ROLL_BIT        1
@@ -365,7 +365,7 @@ struct pressureResponse_s
 
 /* --- Delays and waiting rates --- */
 
-#define DELAY_LED_TASK 				1000
+#define DELAY_LED_TASK 				100
 #define DELAY_THRUSTERS_TASK 		20
 #define DELAY_DEVICES_TASK 			10
 #define DELAY_IMU_TASK 				10

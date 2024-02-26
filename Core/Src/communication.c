@@ -313,7 +313,7 @@ void ShoreReceive()
 		for(uint8_t i=0; i<SHORE_REQUEST_MODES_NUMBER; ++i) {
 			if(uartBus[SHORE_UART].rxBuffer[0] == ShoreCodes[i]) {
 				counterRx = 1;
-				uartBus[SHORE_UART].rxLength = ShoreLength[i]-1;
+				uartBus[SHORE_UART].rxLength = 5;//ShoreLength[i]-1;
 				HAL_UART_Receive_IT(uartBus[SHORE_UART].huart, uartBus[SHORE_UART].rxBuffer+1, uartBus[SHORE_UART].rxLength);
 				xTimerStartFromISR(UARTTimer, &xHigherPriorityTaskWoken);
 				break;

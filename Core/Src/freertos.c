@@ -45,7 +45,7 @@
 
 /* Private define ------------------------------------------------------------*/
 /* USER CODE BEGIN PD */
-
+ uint32_t toggle_counter;
 /* USER CODE END PD */
 
 /* Private macro -------------------------------------------------------------*/
@@ -85,8 +85,8 @@ osThreadId tPcCommTaskHandle;
 uint32_t tPcCommTaskBuffer[ 128 ];
 osStaticThreadDef_t tPcCommTaskControlBlock;
 osTimerId tUartTimerHandle;
+osTimerId tTechCommTimerHandle;
 osTimerId tSilenceHandle;
-osTimerId tTechCommTImerHandle;
 osMutexId mutDataHandle;
 osStaticMutexDef_t mutDataControlBlock;
 
@@ -103,8 +103,8 @@ void func_tDevCommTask(void const * argument);
 void func_tSensCommTask(void const * argument);
 void func_tPcCommTask(void const * argument);
 void func_tUartTimer(void const * argument);
+void tTechCommTimer_callback(void const * argument);
 void tSilence_func(void const * argument);
-void tTechCommTImer_callback(void const * argument);
 
 void MX_FREERTOS_Init(void); /* (MISRA C 2004 rule 8.1) */
 
@@ -173,13 +173,13 @@ void MX_FREERTOS_Init(void) {
   osTimerDef(tUartTimer, func_tUartTimer);
   tUartTimerHandle = osTimerCreate(osTimer(tUartTimer), osTimerOnce, NULL);
 
+  /* definition and creation of tTechCommTimer */
+  osTimerDef(tTechCommTimer, tTechCommTimer_callback);
+  tTechCommTimerHandle = osTimerCreate(osTimer(tTechCommTimer), osTimerOnce, NULL);
+
   /* definition and creation of tSilence */
   osTimerDef(tSilence, tSilence_func);
   tSilenceHandle = osTimerCreate(osTimer(tSilence), osTimerOnce, NULL);
-
-  /* definition and creation of tTechCommTImer */
-  osTimerDef(tTechCommTImer, tTechCommTImer_callback);
-  tTechCommTImerHandle = osTimerCreate(osTimer(tTechCommTImer), osTimerOnce, NULL);
 
   /* USER CODE BEGIN RTOS_TIMERS */
   SilenceTimer = xTimerCreate("silence", DELAY_SILENCE/portTICK_RATE_MS, pdFALSE, 0, (TimerCallbackFunction_t) tSilence_func);
@@ -198,27 +198,27 @@ void MX_FREERTOS_Init(void) {
   tLedBlinkingTaskHandle = osThreadCreate(osThread(tLedBlinkingTask), NULL);
 
   /* definition and creation of tVmaCommTask */
-  osThreadStaticDef(tVmaCommTask, func_tVmaCommTask, osPriorityBelowNormal, 0, 128, tVmaCommTaskBuffer, &tVmaCommTaskControlBlock);
+  osThreadStaticDef(tVmaCommTask, func_tVmaCommTask, osPriorityNormal, 0, 128, tVmaCommTaskBuffer, &tVmaCommTaskControlBlock);
   tVmaCommTaskHandle = osThreadCreate(osThread(tVmaCommTask), NULL);
 
   /* definition and creation of tImuCommTask */
-  osThreadStaticDef(tImuCommTask, func_tImuCommTask, osPriorityBelowNormal, 0, 128, tImuCommTaskBuffer, &tImuCommTaskControlBlock);
+  osThreadStaticDef(tImuCommTask, func_tImuCommTask, osPriorityNormal, 0, 128, tImuCommTaskBuffer, &tImuCommTaskControlBlock);
   tImuCommTaskHandle = osThreadCreate(osThread(tImuCommTask), NULL);
 
   /* definition and creation of tStabilizationTask */
-  osThreadStaticDef(tStabilizationTask, func_tStabilizationTask, osPriorityBelowNormal, 0, 128, tStabilizationTaskBuffer, &tStabilizationTaskControlBlock);
+  osThreadStaticDef(tStabilizationTask, func_tStabilizationTask, osPriorityIdle, 0, 128, tStabilizationTaskBuffer, &tStabilizationTaskControlBlock);
   tStabilizationTaskHandle = osThreadCreate(osThread(tStabilizationTask), NULL);
 
   /* definition and creation of tDevCommTask */
-  osThreadStaticDef(tDevCommTask, func_tDevCommTask, osPriorityBelowNormal, 0, 128, tDevCommTaskBuffer, &tDevCommTaskControlBlock);
+  osThreadStaticDef(tDevCommTask, func_tDevCommTask, osPriorityIdle, 0, 128, tDevCommTaskBuffer, &tDevCommTaskControlBlock);
   tDevCommTaskHandle = osThreadCreate(osThread(tDevCommTask), NULL);
 
   /* definition and creation of tSensCommTask */
-  osThreadStaticDef(tSensCommTask, func_tSensCommTask, osPriorityBelowNormal, 0, 128, tSensCommTaskBuffer, &tSensCommTaskControlBlock);
+  osThreadStaticDef(tSensCommTask, func_tSensCommTask, osPriorityNormal, 0, 128, tSensCommTaskBuffer, &tSensCommTaskControlBlock);
   tSensCommTaskHandle = osThreadCreate(osThread(tSensCommTask), NULL);
 
   /* definition and creation of tPcCommTask */
-  osThreadStaticDef(tPcCommTask, func_tPcCommTask, osPriorityBelowNormal, 0, 128, tPcCommTaskBuffer, &tPcCommTaskControlBlock);
+  osThreadStaticDef(tPcCommTask, func_tPcCommTask, osPriorityHigh, 0, 128, tPcCommTaskBuffer, &tPcCommTaskControlBlock);
   tPcCommTaskHandle = osThreadCreate(osThread(tPcCommTask), NULL);
 
   /* USER CODE BEGIN RTOS_THREADS */
@@ -242,6 +242,7 @@ void func_tLedBlinkingTask(void const * argument)
   /* Infinite loop */
   for(;;)
   {
+	  toggle_counter++;
         HAL_GPIO_TogglePin(GPIOB, led1_Pin);
         osDelayUntil(&sysTime, DELAY_LED_TASK);
         HAL_GPIO_TogglePin(GPIOB, led2_Pin);
@@ -492,6 +493,14 @@ void func_tUartTimer(void const * argument)
   /* USER CODE END func_tUartTimer */
 }
 
+/* tTechCommTimer_callback function */
+void tTechCommTimer_callback(void const * argument)
+{
+  /* USER CODE BEGIN tTechCommTimer_callback */
+
+  /* USER CODE END tTechCommTimer_callback */
+}
+
 /* tSilence_func function */
 void tSilence_func(void const * argument)
 {
@@ -535,14 +544,6 @@ void tSilence_func(void const * argument)
 	//HAL_GPIO_WritePin(GPIOE, RES_PC_2_Pin, GPIO_PIN_SET); // ONOFF
 	xTimerStart(SilenceTimer, 50);
   /* USER CODE END tSilence_func */
-}
-
-/* tTechCommTImer_callback function */
-void tTechCommTImer_callback(void const * argument)
-{
-  /* USER CODE BEGIN tTechCommTImer_callback */
-
-  /* USER CODE END tTechCommTImer_callback */
 }
 
 /* Private application code --------------------------------------------------*/

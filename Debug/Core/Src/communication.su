@@ -12,7 +12,7 @@
 ../Core/Src/communication.c:308:6:ShoreReceive	32	static,ignoring_inline_asm
 ../Core/Src/communication.c:339:6:DevicesRequestUpdate	24	static
 ../Core/Src/communication.c:399:6:DevicesResponseUpdate	32	static
-../Core/Src/communication.c:425:6:ShoreRequest	616	static
+../Core/Src/communication.c:425:6:ShoreRequest	608	static
 ../Core/Src/communication.c:588:6:ShoreConfigRequest	104	static
 ../Core/Src/communication.c:642:6:ShoreDirectRequest	48	static
 ../Core/Src/communication.c:674:6:ShoreResponse	88	static
