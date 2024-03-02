@@ -1,4 +1,4 @@
-../Core/Src/communication.c:49:6:variableInit	568	static
+../Core/Src/communication.c:49:6:variableInit	528	static
 ../Core/Src/communication.c:110:6:uartBusesInit	16	static
 ../Core/Src/communication.c:171:6:i2cBusesInit	4	static
 ../Core/Src/communication.c:178:6:transmitPackage	16	static
@@ -12,12 +12,12 @@
 ../Core/Src/communication.c:308:6:ShoreReceive	32	static,ignoring_inline_asm
 ../Core/Src/communication.c:339:6:DevicesRequestUpdate	24	static
 ../Core/Src/communication.c:399:6:DevicesResponseUpdate	32	static
-../Core/Src/communication.c:425:6:ShoreRequest	608	static
-../Core/Src/communication.c:588:6:ShoreConfigRequest	104	static
-../Core/Src/communication.c:642:6:ShoreDirectRequest	48	static
-../Core/Src/communication.c:674:6:ShoreResponse	88	static
-../Core/Src/communication.c:696:6:ShoreConfigResponse	120	static
-../Core/Src/communication.c:738:6:ShoreDirectResponse	24	static
-../Core/Src/communication.c:751:9:sign	16	static
-../Core/Src/communication.c:762:6:ImuReceive	24	static
-../Core/Src/communication.c:793:16:calculateCRC	24	static
+../Core/Src/communication.c:425:6:ShoreRequest	576	static
+../Core/Src/communication.c:590:6:ShoreConfigRequest	104	static
+../Core/Src/communication.c:644:6:ShoreDirectRequest	48	static
+../Core/Src/communication.c:676:6:ShoreResponse	88	static
+../Core/Src/communication.c:698:6:ShoreConfigResponse	120	static
+../Core/Src/communication.c:740:6:ShoreDirectResponse	24	static
+../Core/Src/communication.c:753:9:sign	16	static
+../Core/Src/communication.c:764:6:ImuReceive	24	static
+../Core/Src/communication.c:797:16:calculateCRC	24	static

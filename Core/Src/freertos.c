@@ -517,9 +517,10 @@ void tSilence_func(void const * argument)
 
 		if(xSemaphoreTake(mutDataHandle, (TickType_t) WAITING_TIMER) == pdTRUE) {
 			resetThrusters();
-			for(uint8_t i=0; i<STABILIZATION_AMOUNT; i++) {
-				rStabConstants[i].enable = false;
-			}
+//			for(uint8_t i=0; i<STABILIZATION_AMOUNT; i++) {
+//				rStabConstants[i].enable = false;
+//			}
+
 			xSemaphoreGive(mutDataHandle);
 		}
 
@@ -542,6 +543,7 @@ void tSilence_func(void const * argument)
 		}
 //	}
 	//HAL_GPIO_WritePin(GPIOE, RES_PC_2_Pin, GPIO_PIN_SET); // ONOFF
+
 	xTimerStart(SilenceTimer, 50);
   /* USER CODE END tSilence_func */
 }

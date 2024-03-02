@@ -10,4 +10,4 @@
 ../Core/Src/freertos.c:442:6:func_tPcCommTask	24	static
 ../Core/Src/freertos.c:455:6:func_tUartTimer	24	static
 ../Core/Src/freertos.c:497:6:tTechCommTimer_callback	16	static
-../Core/Src/freertos.c:505:6:tSilence_func	40	static
+../Core/Src/freertos.c:505:6:tSilence_func	32	static

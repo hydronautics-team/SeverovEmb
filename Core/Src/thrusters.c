@@ -16,6 +16,7 @@
 #include "communication.h"
 #include "checksum.h"
 
+
 void addMarchToSumm(float *velocity);
 void addLagToSumm(float *velocity);
 void addDepthToSumm(float *velocity);
@@ -24,30 +25,28 @@ void addRollToSumm(float *velocity);
 void addPitchToSumm(float *velocity);
 
 uint8_t resizeFloatToUint8(float input);
-
-float KVMA[8][7] = {
-    {-0.4041149, -0.25000000, -0.35350677, 1.00000000, 0.3, 1.0000000, -1.00000000},
-    {-0.4041149, 0.25000000, -0.3535067, -1.0000000, 0.3,  -1.00000000, 1.500000000},
-    {-0.4041149, 0.25000000, 0.3535067, -1.0000000, 0.3, 1.0000000, 1.00000000},
-    {0.4041149, 0.2500000, -0.35350677, 1.00000000, -0.3, 1.00000000, 1.500000000},
-    {-0.40411496, -0.2500000, 0.35350677, 1.00000000, -0.3, 1.00000000, 1.50000000},
-    {-0.40411496, 0.25000000, 0.3535067, -1.0000000, -0.3, -1.0000000, -1.50000000},
-    {0.4041149, 0.25000000, 0.35350677, 1.00000000, 0.3, 1.0000000, 1.00000000},
-    {0.40411496, -0.25000000, 0.3535067, -1.0000000, 0.3, -1.00000000,  1.50000000}
+// velocity[i] = (KVMA[i][0]*Ux + KVMA[i][1]*Uy + KVMA[i][2]*Uz
+//+ KVMA[i][3]*Ugamma + KVMA[i][4]*Uteta + KVMA[i][5]*Upsi)*KVMA[i][6];
+float KVMA[6][5] = {
+    {1.0, 1.0, 0.0, 1.0, 0.0},
+    {0.0, 0.0, 1.0, 0.0, 1.0},
+    {1.0, -1.0, 0.0, 1.0, 0.0},
+    {1.0, -1.0, 0.0, -1.0, 0.0},
+    {0.0, 0.0, 1.0, 0.0, -1.0},
+    {1.0, 1.0, 0.0, -1.0, 0.0}
 };
 
 void thrustersInit()
 {
-   //Numarate by LOVE
-  rThrusters[FDR].address = 1; //Forward Down Right
+  rThrusters[FDR].address = 1; //Forward Left
   rThrusters[FDL].address = 2; //Forward Down Left
   rThrusters[BDR].address = 3; //Back Down Right
   rThrusters[BDL].address = 4; //Back Down Left
 
   rThrusters[FUR].address = 5; //Forward Up Right
   rThrusters[FUL].address = 6; //Forward Up Left
-  rThrusters[BUR].address = 7; //Back Up Right
-  rThrusters[BUL].address = 8; //Back Up Left
+//  rThrusters[BUR].address = 7; //Back Up Right
+//  rThrusters[BUL].address = 8; //Back Up Left
 
   for(uint8_t i=0; i<THRUSTERS_NUMBER; i++) {
     rThrusters[i].desiredSpeed = 0;
@@ -81,7 +80,7 @@ void fillThrustersRequest(uint8_t *buf, uint8_t thruster)
     res.AA = 0xAA;
     res.type = 0x01;
     res.address = 0xAF;
-    for(int i=0; i<8;i++){
+    for(int i=0; i<THRUSTERS_NUMBER;i++){
     	int16_t velocity = rThrusters[i].desiredSpeed;
 
 
@@ -137,9 +136,9 @@ void formThrustVectors()
 
   Ux = rJoySpeed.march;
   Uy = rJoySpeed.lag;
-  Uz = rJoySpeed.depth;
-  Upsi = rJoySpeed.yaw;
-  Ugamma = rJoySpeed.roll;
+  Uz = rStabState[STAB_DEPTH].outputSignal;
+  Upsi = rStabState[STAB_YAW].outputSignal;
+  Ugamma = rStabState[STAB_ROLL].outputSignal;
   Uteta = rJoySpeed.pitch;
 
   for (uint8_t i = 0; i < THRUSTERS_NUMBER; ++i)

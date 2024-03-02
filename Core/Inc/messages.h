@@ -13,10 +13,10 @@
 #pragma pack(push, 1)
 
 /// Number of polling thrusters
-#define THRUSTERS_NUMBER             		8
+#define THRUSTERS_NUMBER             		6
 
 /// Request length for normal thrusters polling message (request from master)
-#define THRUSTERS_REQUEST_LENGTH   			13
+#define THRUSTERS_REQUEST_LENGTH   			11
 /// Request length for configation thrusters polling message (request from master)
 #define THRUSTERS_CONFIG_REQUEST_LENGTH  	13
 /// Response length for all thrusters answer message (response to master)
@@ -112,7 +112,7 @@ struct devicesResponse_s
 
 #define SHORE_REQUEST_CODE             0xA5
 
-#define SHORE_REQUEST_LENGTH           34
+#define SHORE_REQUEST_LENGTH           31
 
 #define SHORE_STABILIZE_DEPTH_BIT       0
 #define SHORE_STABILIZE_ROLL_BIT        1
