@@ -506,6 +506,7 @@ void tSilence_func(void const * argument)
 {
   /* USER CODE BEGIN tSilence_func */
 	if(fromTickToMs(xTaskGetTickCount()) - uartBus[SHORE_UART].lastMessage > UART_SWITCH_DELAY && counterRx == 0) {
+		input_value = alpha*sin(sin_counter * omega/1000.0);
 //		if(uartBus[SHORE_UART].huart == &huart1) {
 //			uartBus[SHORE_UART].huart = &huart5;
 //		}
@@ -517,9 +518,10 @@ void tSilence_func(void const * argument)
 
 		if(xSemaphoreTake(mutDataHandle, (TickType_t) WAITING_TIMER) == pdTRUE) {
 			resetThrusters();
-			for(uint8_t i=0; i<STABILIZATION_AMOUNT; i++) {
-				rStabConstants[i].enable = false;
-			}
+//			for(uint8_t i=0; i<STABILIZATION_AMOUNT; i++) {
+//				rStabConstants[i].enable = false;
+//			}
+
 			xSemaphoreGive(mutDataHandle);
 		}
 
@@ -542,7 +544,9 @@ void tSilence_func(void const * argument)
 		}
 //	}
 	//HAL_GPIO_WritePin(GPIOE, RES_PC_2_Pin, GPIO_PIN_SET); // ONOFF
-	xTimerStart(SilenceTimer, 50);
+
+	xTimerStart(SilenceTimer, 1);
+	sin_counter+=1;
   /* USER CODE END tSilence_func */
 }
 

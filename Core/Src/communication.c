@@ -424,6 +424,8 @@ void DevicesResponseUpdate(uint8_t *buf, uint8_t dev)
 
 void ShoreRequest(uint8_t *requestBuf)
 {
+	bool flag = false;
+	flag = IsCrc16ChecksummCorrect(requestBuf, SHORE_REQUEST_LENGTH);
     if (IsCrc16ChecksummCorrect(requestBuf, SHORE_REQUEST_LENGTH)) {
     	struct shoreRequest_s req;
     	memcpy((void*)&req, (void*)requestBuf, SHORE_REQUEST_LENGTH);
@@ -767,9 +769,9 @@ void ImuReceive(uint8_t *ReceiveBuf)
 
 
 	 rSensors.crc = (ReceiveBuf[28] << 8) | ReceiveBuf[29];
-	 //crc length= IMU_RESPONSE_LENGTH - 1 sync byte - 2 bytes crc
-	 uint16_t calculated_crc = calculateCRC(ReceiveBuf + 1, IMU_RESPONSE_LENGTH - 1 - 2);
-	 if (rSensors.crc != calculated_crc)
+		 //crc length= IMU_RESPONSE_LENGTH - 1 sync byte - 2 bytes crc
+		 uint16_t calculated_crc = calculateCRC(ReceiveBuf + 1, IMU_RESPONSE_LENGTH - 1 - 2);
+		 if (rSensors.crc != calculated_crc)
 		 return;
 
 
@@ -778,11 +780,13 @@ void ImuReceive(uint8_t *ReceiveBuf)
   	  memcpy(&rSensors.pitch, ReceiveBuf + 8, sizeof(rSensors.pitch));
   	  memcpy(&rSensors.roll, ReceiveBuf + 12, sizeof(rSensors.roll));
 
-  	  memcpy(&rSensors.accelX, ReceiveBuf + 16, sizeof(rSensors.accelX));
-  	  memcpy(&rSensors.accelY, ReceiveBuf + 20, sizeof(rSensors.accelY));
-  	  memcpy(&rSensors.accelZ, ReceiveBuf + 24, sizeof(rSensors.accelZ));
-
-
+  	  memcpy(&rSensors.rollSpeed, ReceiveBuf + 16, sizeof(rSensors.yawSpeed));
+  	  memcpy(&rSensors.pitchSpeed, ReceiveBuf + 20, sizeof(rSensors.pitchSpeed));
+  	  memcpy(&rSensors.yawSpeed, ReceiveBuf + 24, sizeof(rSensors.rollSpeed));
+//
+//  	  memcpy(&rSensors.accelX, ReceiveBuf + 28, sizeof(rSensors.accelX));
+//  	  memcpy(&rSensors.accelY, ReceiveBuf + 32, sizeof(rSensors.accelY));
+//  	  memcpy(&rSensors.accelZ, ReceiveBuf + 36, sizeof(rSensors.accelZ));
 
     rSensors.LastTick = xTaskGetTickCount();
 

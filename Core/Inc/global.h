@@ -13,12 +13,19 @@
 
 #include "robot.h"
 #include "messages.h"
+#include "math.h"
+
+extern int16_t input_value;
+extern int16_t alpha;
+extern int16_t omega;
+extern uint32_t sin_counter;
 
 extern struct robotState_s 						rState;
 extern struct robotThrusters_s 					rThrusters[THRUSTERS_NUMBER];
 extern struct robotSensors_s 					rSensors;
 extern struct robotPc_s 						rComputer;
 extern struct robotJoystickSpeed_s 				rJoySpeed;
+extern struct robotJoystickSpeed_s 				rMonitorInput;
 extern struct robotPositionMovement_s 			rPosMov;
 extern struct robotDevices_s 					rDevice[DEV_AMOUNT];
 extern struct RobotLogicDevices_s 				rLogicDevice[LOGDEV_AMOUNT];
