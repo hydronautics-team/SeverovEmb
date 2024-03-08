@@ -24,16 +24,19 @@ void addYawToSumm(float *velocity);
 void addRollToSumm(float *velocity);
 void addPitchToSumm(float *velocity);
 
-uint8_t resizeFloatToUint8(float input);
+uint8_t thruster_init = 0;
+
+
+int8_t resizeFloatToInt8(float input);
 // velocity[i] = (KVMA[i][0]*Ux + KVMA[i][1]*Uy + KVMA[i][2]*Uz
 //+ KVMA[i][3]*Ugamma + KVMA[i][4]*Uteta + KVMA[i][5]*Upsi)*KVMA[i][6];
 float KVMA[6][5] = {
-    {1.0, 1.0, 0.0, 1.0, 0.0},
-    {0.0, 0.0, 1.0, 0.0, 1.0},
+    {-1.0, -1.0, 0.0, -1.0, 0.0},
+    {0.0, 0.0, -1.0, 0.0, -1.0},
     {1.0, -1.0, 0.0, 1.0, 0.0},
-    {1.0, -1.0, 0.0, -1.0, 0.0},
+    {-1.0, 1.0, 0.0, 1.0, 0.0},
     {0.0, 0.0, 1.0, 0.0, -1.0},
-    {1.0, 1.0, 0.0, -1.0, 0.0}
+    {-1.0, -1.0, 0.0, 1.0, 0.0}
 };
 
 void thrustersInit()
@@ -81,23 +84,23 @@ void fillThrustersRequest(uint8_t *buf, uint8_t thruster)
     res.type = 0x01;
     res.address = 0xAF;
     for(int i=0; i<THRUSTERS_NUMBER;i++){
-    	int16_t velocity = rThrusters[i].desiredSpeed;
+//    	int16_t velocity = rThrusters[i].desiredSpeed;
+//
+//
+//    	// Inverting
+//    	if(rThrusters[i].inverse) {
+////    		velocity *= -1;
+//    	}
+//
+//    	// Multiplier constants
+//    	if(velocity > 0) {
+//    		velocity = (int16_t) ( (float) (velocity) * rThrusters[i].kForward);
+//    	}
+//    	else if(velocity < 0) {
+//    		velocity = (int16_t) ((float) (velocity) * rThrusters[i].kBackward);
+//    	}
 
-
-    	// Inverting
-    	if(rThrusters[i].inverse) {
-//    		velocity *= -1;
-    	}
-
-    	// Multiplier constants
-    	if(velocity > 0) {
-    		velocity = (int16_t) ( (float) (velocity) * rThrusters[i].kForward);
-    	}
-    	else if(velocity < 0) {
-    		velocity = (int16_t) ((float) (velocity) * rThrusters[i].kBackward);
-    	}
-
-    	res.velocity[i] = velocity;
+    	res.velocity[i] = rThrusters[i].desiredSpeed;
     }
     res.pwm_servo = rDevice[GRAB].force;
     memcpy((void*)buf, (void*)&res, THRUSTERS_REQUEST_LENGTH);
@@ -127,33 +130,53 @@ void formThrustVectors()
     velocity[i] = 0;
   }
 
-  float Ux;
-  float Uy;
-  float Uz;
-  float Ugamma;
-  float Uteta;
-  float Upsi;
+//  float Ux;
+//  float Uy;
+//  float Uz;
+//  float Ugamma;
+//  float Uteta;
+//  float Upsi;
 
-  Ux = rJoySpeed.march;
-  Uy = rJoySpeed.lag;
-  Uz = rStabState[STAB_DEPTH].outputSignal;
-  Upsi = rStabState[STAB_YAW].outputSignal;
-  Ugamma = rStabState[STAB_ROLL].outputSignal;
-  Uteta = rJoySpeed.pitch;
+  float U[6];
+
+//  Ux = rJoySpeed.march;
+//  Uy = rJoySpeed.lag;
+//  Uz = rStabState[STAB_DEPTH].outputSignal;
+//  Upsi = rStabState[STAB_YAW].outputSignal;
+//  Ugamma = rStabState[STAB_ROLL].outputSignal;
+//  Uteta = rJoySpeed.pitch;
+
+  U[STAB_MARCH] = rJoySpeed.march;
+  U[STAB_LAG] = rJoySpeed.lag;
+  U[STAB_DEPTH] = rJoySpeed.depth;
+  U[STAB_YAW] = rJoySpeed.yaw;
+  U[STAB_ROLL] = rJoySpeed.roll;
+  U[STAB_PITCH] = rJoySpeed.pitch;
+
+  for(uint8_t i = 0; i < 6; i++)
+  {
+	if(rStabConstants[i].enable)
+		U[i] = rStabState[i].outputSignal;
+  }
 
   for (uint8_t i = 0; i < THRUSTERS_NUMBER; ++i)
   {
-    velocity[i] = (KVMA[i][0]*Ux + KVMA[i][1]*Uy + KVMA[i][2]*Uz
-        + KVMA[i][3]*Ugamma + KVMA[i][4]*Uteta + KVMA[i][5]*Upsi)*KVMA[i][6];
-    rThrusters[i].desiredSpeed = resizeFloatToUint8(velocity[i]);
-  }
+    velocity[i] = KVMA[i][0]*U[STAB_MARCH] + KVMA[i][1]*U[STAB_LAG] + KVMA[i][2]*U[STAB_DEPTH]
+         + KVMA[i][3]*U[STAB_YAW] + KVMA[i][4]*U[STAB_ROLL];
+    if(!thruster_init)
+    {
+    	rThrusters[i].desiredSpeed = resizeFloatToInt8(velocity[i]);
+    }
+    else
+    	rThrusters[i].desiredSpeed = 0;
+  	}
 
 }
 
-uint8_t resizeFloatToUint8(float input)
+int8_t resizeFloatToInt8(float input)
 {
   int32_t cast = (int32_t) input;
-  cast = cast / 0xFF;
+//  cast = cast / 0xFF;
   if (cast > 127) {
     cast = 127;
   }

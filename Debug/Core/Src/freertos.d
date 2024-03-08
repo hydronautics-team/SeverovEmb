@@ -51,7 +51,8 @@ Core/Src/freertos.o: ../Core/Src/freertos.c \
  ../Core/Inc/robot.h ../Core/Inc/communication.h ../Core/Inc/usart.h \
  ../Core/Inc/stabilization.h ../Core/Inc/FreeRTOSTick.h \
  ../Core/Inc/FreeRTOSConfig.h ../Core/Inc/global.h ../Core/Inc/checksum.h \
- ../Core/Inc/thrusters.h ../Core/Inc/MS5837.h
+ ../Core/Inc/thrusters.h ../Core/Inc/MS5837.h \
+ ../Core/Inc/moving_average.h
 ../Middlewares/Third_Party/FreeRTOS/Source/include/FreeRTOS.h:
 ../Core/Inc/FreeRTOSConfig.h:
 ../Middlewares/Third_Party/FreeRTOS/Source/include/projdefs.h:
@@ -116,3 +117,4 @@ Core/Src/freertos.o: ../Core/Src/freertos.c \
 ../Core/Inc/checksum.h:
 ../Core/Inc/thrusters.h:
 ../Core/Inc/MS5837.h:
+../Core/Inc/moving_average.h:

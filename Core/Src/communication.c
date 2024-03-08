@@ -65,8 +65,10 @@ void variableInit()
 	rSensors.old_yaw = 0;
 	rSensors.spins = 0;
 
+	rSensors.pressure_raw = 0;
 	rSensors.pressure = 0;
 	rSensors.pressure_null = 0;
+	rSensors.last_pressure = 0;
 
 	rSensors.rollSpeed = 0;
 	rSensors.pitchSpeed = 0;
@@ -780,9 +782,9 @@ void ImuReceive(uint8_t *ReceiveBuf)
   	  memcpy(&rSensors.pitch, ReceiveBuf + 8, sizeof(rSensors.pitch));
   	  memcpy(&rSensors.roll, ReceiveBuf + 12, sizeof(rSensors.roll));
 
-  	  memcpy(&rSensors.rollSpeed, ReceiveBuf + 16, sizeof(rSensors.yawSpeed));
+  	  memcpy(&rSensors.rollSpeed, ReceiveBuf + 16, sizeof(rSensors.rollSpeed));
   	  memcpy(&rSensors.pitchSpeed, ReceiveBuf + 20, sizeof(rSensors.pitchSpeed));
-  	  memcpy(&rSensors.yawSpeed, ReceiveBuf + 24, sizeof(rSensors.rollSpeed));
+  	  memcpy(&rSensors.yawSpeed, ReceiveBuf + 24, sizeof(rSensors.yawSpeed));
 //
 //  	  memcpy(&rSensors.accelX, ReceiveBuf + 28, sizeof(rSensors.accelX));
 //  	  memcpy(&rSensors.accelY, ReceiveBuf + 32, sizeof(rSensors.accelY));

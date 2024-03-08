@@ -1,0 +1,2 @@
+../Core/Src/moving_average.c:3:6:movingAverageInit	2
+../Core/Src/moving_average.c:12:7:movingAverageIterate	1

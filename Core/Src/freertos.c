@@ -36,6 +36,8 @@
 #include "checksum.h"
 #include "thrusters.h"
 #include "MS5837.h"
+#include "moving_average.h"
+#include "math.h"
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -45,7 +47,10 @@
 
 /* Private define ------------------------------------------------------------*/
 /* USER CODE BEGIN PD */
- uint32_t toggle_counter;
+uint32_t toggle_counter;
+
+extern Moving_Average_filter pressure_filter;
+extern Moving_Average_filter velocity_pressure_filter;
 /* USER CODE END PD */
 
 /* Private macro -------------------------------------------------------------*/
@@ -360,7 +365,7 @@ void func_tStabilizationTask(void const * argument)
 					stabilizationUpdate(i);
 				}
 			}
-			//formThrustVectors();
+			formThrustVectors();
 			xSemaphoreGive(mutDataHandle);
 		}
 
@@ -424,10 +429,16 @@ void func_tSensCommTask(void const * argument)
   {
     if(xSemaphoreTake(mutDataHandle, (TickType_t) DELAY_SENSOR_TASK) == pdTRUE) {
 //      MS5837_read(i2cBus[DEV_I2C].hi2c);
-      rSensors.pressure = MS5837_02BA_get_actual_pressure();
-      xSemaphoreGive(mutDataHandle);
+    	rSensors.pressure_raw = MS5837_02BA_get_actual_pressure();
+    	float pressure = movingAverageIterate(&pressure_filter, rSensors.pressure_raw);
+    	rSensors.last_pressure = rSensors.pressure;
+		rSensors.pressure = pressure;
+		rSensors.velocity_pressure = movingAverageIterate(&velocity_pressure_filter,
+				(rSensors.pressure - rSensors.last_pressure)*1000/DELAY_SENSOR_TASK);
+		xSemaphoreGive(mutDataHandle);
     }
     osDelayUntil(&sysTime, DELAY_SENSOR_TASK); // �?справленная задержка
+//    osDelayUntil(&sysTime, pressure_delay);
   }
   /* USER CODE END func_tSensCommTask */
 }
@@ -516,7 +527,7 @@ void tSilence_func(void const * argument)
 		HAL_UART_Receive_IT(uartBus[SHORE_UART].huart, uartBus[SHORE_UART].rxBuffer, 1);
 
 		if(xSemaphoreTake(mutDataHandle, (TickType_t) WAITING_TIMER) == pdTRUE) {
-			resetThrusters();
+//			resetThrusters();
 //			for(uint8_t i=0; i<STABILIZATION_AMOUNT; i++) {
 //				rStabConstants[i].enable = false;
 //			}

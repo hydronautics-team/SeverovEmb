@@ -138,8 +138,10 @@ struct robotSensors_s {
 	uint16_t  crc;
 
 	bool startPressure;
+	int32_t pressure_raw;
 	float pressure;
 	float pressure_null;
+	float last_pressure;
 	float velocity_pressure;
 
 	float in_pressure;
@@ -208,6 +210,7 @@ struct robotStabilizationConstants_s {
 	// Thrusters unit cast
 	float pThrustersMin;
 	float pThrustersMax;
+	float pThrustersCast;
 	// Output summator saturation
 	float sOutSummatorMax;
 	float sOutSummatorMin;

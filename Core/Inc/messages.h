@@ -36,7 +36,7 @@ struct thrustersRequest_s
 	uint8_t AA;
 	uint8_t type; // 0x01
 	uint8_t address;
-	int8_t velocity[8];
+	int8_t velocity[6];
 	int8_t pwm_servo;
 	uint8_t crc;
 };
@@ -367,10 +367,13 @@ struct pressureResponse_s
 
 #define DELAY_LED_TASK 				100
 #define DELAY_THRUSTERS_TASK 		20
-#define DELAY_DEVICES_TASK 			10
+#define DELAY_DEVICES_TASK 			1000
 #define DELAY_IMU_TASK 				10
 #define DELAY_PC_TASK 				10
-#define DELAY_SENSOR_TASK 			100
+//Debug
+#define DELAY_SENSOR_TASK 			10
+//#define DELAY_SENSOR_TASK 			100
+//
 #define DELAY_STABILIZATION_TASK 	10
 #define DELAY_TIMER_TASK 			30
 #define DELAY_SILENCE    			1000
