@@ -315,7 +315,7 @@ void ShoreReceive()
 		for(uint8_t i=0; i<SHORE_REQUEST_MODES_NUMBER; ++i) {
 			if(uartBus[SHORE_UART].rxBuffer[0] == ShoreCodes[i]) {
 				counterRx = 1;
-				uartBus[SHORE_UART].rxLength = 5;//ShoreLength[i]-1;
+				uartBus[SHORE_UART].rxLength = ShoreLength[i]-1;
 				HAL_UART_Receive_IT(uartBus[SHORE_UART].huart, uartBus[SHORE_UART].rxBuffer+1, uartBus[SHORE_UART].rxLength);
 				xTimerStartFromISR(UARTTimer, &xHigherPriorityTaskWoken);
 				break;
@@ -445,19 +445,19 @@ void ShoreRequest(uint8_t *requestBuf)
         if (rDevice[GRAB].force < -127) {
             rDevice[GRAB].force = -127;
         }
-        rDevice[TILT].force = req.tilt;
+        rDevice[TILT].force = req.drop;
         if (rDevice[TILT].force < -127) {
         	rDevice[TILT].force = -127;
         }
-        rDevice[GRAB_ROTATION].force  = req.grab_rotate;
-        if (rDevice[GRAB_ROTATION].force < -127) {
-            rDevice[GRAB_ROTATION].force = -127;
-        }
+//        rDevice[GRAB_ROTATION].force  = req.grab_rotate;
+//        if (rDevice[GRAB_ROTATION].force < -127) {
+//            rDevice[GRAB_ROTATION].force = -127;
+//        }
 
-        rDevice[DEV1].force = req.dev1;
-        rDevice[DEV2].force = req.dev2;
+//        rDevice[DEV1].force = req.dev1;
+//        rDevice[DEV2].force = req.dev2;
 
-        rState.lag_error = (float) req.lag_error;
+//        rState.lag_error = (float) req.lag_error;
 
         rSensors.startIMU = PickBit(req.stabilize_flags, SHORE_STABILIZE_IMU_BIT);
 
@@ -467,20 +467,20 @@ void ShoreRequest(uint8_t *requestBuf)
         	flashWriteSettings(&config);
         }
 
-        tempCameraNum = req.cameras;
+//        tempCameraNum = req.cameras;
 
         uint8_t old_reset = rComputer.reset;
-        if(old_reset != req.pc_reset) {
-            if(req.pc_reset == PC_ON_CODE) {
+//        if(old_reset != req.pc_reset) {
+//            if(req.pc_reset == PC_ON_CODE) {
    //         	HAL_GPIO_WritePin(PC_CONTROL1_GPIO_Port, PC_CONTROL1_Pin, GPIO_PIN_RESET); // RESET
      //       	HAL_GPIO_WritePin(PC_CONTROL2_GPIO_Port, PC_CONTROL2_Pin, GPIO_PIN_RESET); // ONOFF
-            }
-            else if(req.pc_reset == PC_OFF_CODE) {
+//            }
+//            else if(req.pc_reset == PC_OFF_CODE) {
  //           	HAL_GPIO_WritePin(PC_CONTROL1_GPIO_Port, PC_CONTROL1_Pin, GPIO_PIN_SET); // RESET
    //         	HAL_GPIO_WritePin(PC_CONTROL2_GPIO_Port, PC_CONTROL2_Pin, GPIO_PIN_SET); // ONOFF
-            }
-        }
-        rComputer.reset = req.pc_reset;
+//            }
+//        }
+//        rComputer.reset = req.pc_reset;
 
         bool wasEnabled = rStabConstants[STAB_YAW].enable;
         rStabConstants[STAB_YAW].enable = PickBit(req.stabilize_flags, SHORE_STABILIZE_YAW_BIT);
@@ -688,12 +688,12 @@ void ShoreResponse(uint8_t *responseBuf)
 
     res.pressure = rSensors.pressure;
 
-    res.vma_errors = 0x55;         //!!!!!TODO!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+   // res.vma_errors = 0x55;         //!!!!!TODO!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
     // TODO do this properly pls
-    res.dev_errors = 0;//robot->device.errors;
-    res.pc_errors = rComputer.errors;
+   // res.dev_errors = 0;//robot->device.errors;
+  //  res.pc_errors = rComputer.errors;
 
-    memcpy((void*)responseBuf, (void*)&res, SHORE_RESPONSE_LENGTH);
+    memcpy((void*)responseBuf, (void*)&res, SHORE_RESPONSE_LENGTH-2);
     AddCrc16Checksumm(responseBuf, SHORE_RESPONSE_LENGTH);
 }
 
