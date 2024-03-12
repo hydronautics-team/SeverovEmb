@@ -682,11 +682,10 @@ void ShoreResponse(uint8_t *responseBuf)
     res.roll = rSensors.roll;
     res.pitch = rSensors.pitch;
     res.yaw =  rSensors.yaw;//*rStabState[STAB_YAW].posSignal;//rSensors.yaw;
-    res.rollSpeed = rSensors.rollSpeed;
-    res.pitchSpeed = rSensors.pitchSpeed;
-    res.yawSpeed = rSensors.yawSpeed;
 
     res.pressure = rSensors.pressure;
+    res.dropper = 0;
+    res.grabber = 0;
 
    // res.vma_errors = 0x55;         //!!!!!TODO!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
     // TODO do this properly pls
@@ -694,6 +693,7 @@ void ShoreResponse(uint8_t *responseBuf)
   //  res.pc_errors = rComputer.errors;
 
     memcpy((void*)responseBuf, (void*)&res, SHORE_RESPONSE_LENGTH-2);
+
     AddCrc16Checksumm(responseBuf, SHORE_RESPONSE_LENGTH);
 }
 

@@ -233,7 +233,7 @@ struct shoreResponseDirect_s
 	uint16_t checksum;
 };
 
-#define SHORE_RESPONSE_LENGTH			32
+#define SHORE_RESPONSE_LENGTH			20
 
 struct shoreResponse_s
 {
@@ -241,24 +241,10 @@ struct shoreResponse_s
     float pitch;
     float yaw;
 
-    float rollSpeed;
-    float pitchSpeed;
-    float yawSpeed;
-
     float pressure;
-  //  float in_pressure;
+
     uint8_t dropper;
     uint8_t grabber;
-
-//    uint8_t dev_state;
-//    int16_t leak_data;
-//
-//    uint16_t thrusterCurrent[THRUSTERS_NUMBER];
-//    uint16_t devCurrent[DEVICES_NUMBER];
-//
-//    uint16_t vma_errors;
-//    uint16_t dev_errors;
-//    uint8_t pc_errors;
 
     uint16_t checksum;
 };
