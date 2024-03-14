@@ -1,3 +1,3 @@
 ../Core/Src/stabilization.c:7:6:stabilizationInit	16	static
-../Core/Src/stabilization.c:148:6:stabilizationStart	16	static
-../Core/Src/stabilization.c:177:6:stabilizationUpdate	48	static
+../Core/Src/stabilization.c:152:6:stabilizationStart	16	static
+../Core/Src/stabilization.c:181:6:stabilizationUpdate	48	static

@@ -29,12 +29,12 @@ int8_t resizeFloatToInt8(float input);
 // velocity[i] = (KVMA[i][0]*Ux + KVMA[i][1]*Uy + KVMA[i][2]*Uz
 //+ KVMA[i][3]*Ugamma + KVMA[i][4]*Uteta + KVMA[i][5]*Upsi)*KVMA[i][6];
 float KVMA[6][5] = {
-    {1.0, 1.0, 0.0, 1.0, 0.0},
-    {0.0, 0.0, 1.0, 0.0, 1.0},
+    {-1.0, -1.0, 0.0, -1.0, 0.0},
+    {0.0, 0.0, -1.0, 0.0, -1.0},
     {1.0, -1.0, 0.0, 1.0, 0.0},
-    {1.0, -1.0, 0.0, -1.0, 0.0},
+    {-1.0, 1.0, 0.0, 1.0, 0.0},
     {0.0, 0.0, 1.0, 0.0, -1.0},
-    {1.0, 1.0, 0.0, -1.0, 0.0}
+    {-1.0, -1.0, 0.0, 1.0, 0.0}
 };
 
 void thrustersInit()
@@ -162,8 +162,8 @@ void formThrustVectors()
   {
     velocity[i] = KVMA[i][0]*U[STAB_MARCH] + KVMA[i][1]*U[STAB_LAG] + KVMA[i][2]*U[STAB_DEPTH]
          + KVMA[i][3]*U[STAB_YAW] + KVMA[i][4]*U[STAB_ROLL];
-    if(velocity[i]<=12 && velocity[i]>=-12) //Thrusters dead zone asymmetric, +3 ... -11~-12
-    	velocity[i] = 0;
+//    if(velocity[i]<=12 && velocity[i]>=-12) //Thrusters dead zone asymmetric, +3 ... -11~-12
+//    	velocity[i] = 0;
     if(!thruster_init)
     {
     	rThrusters[i].desiredSpeed = resizeFloatToInt8(velocity[i]);

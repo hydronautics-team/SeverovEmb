@@ -360,7 +360,7 @@ void func_tStabilizationTask(void const * argument)
 					stabilizationUpdate(i);
 				}
 			}
-			//formThrustVectors();
+			formThrustVectors();
 			xSemaphoreGive(mutDataHandle);
 		}
 
@@ -518,7 +518,7 @@ void tSilence_func(void const * argument)
 		HAL_UART_Receive_IT(uartBus[SHORE_UART].huart, uartBus[SHORE_UART].rxBuffer, 1);
 
 		if(xSemaphoreTake(mutDataHandle, (TickType_t) WAITING_TIMER) == pdTRUE) {
-			resetThrusters();
+//			resetThrusters();
 //			for(uint8_t i=0; i<STABILIZATION_AMOUNT; i++) {
 //				rStabConstants[i].enable = false;
 //			}

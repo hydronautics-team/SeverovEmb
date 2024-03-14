@@ -2,5 +2,5 @@
 ../Core/Src/thrusters.c:62:6:resetThrusters	2
 ../Core/Src/thrusters.c:77:6:fillThrustersRequest	4
 ../Core/Src/thrusters.c:108:6:fillThrustersResponse	3
-../Core/Src/thrusters.c:124:6:formThrustVectors	8
+../Core/Src/thrusters.c:124:6:formThrustVectors	6
 ../Core/Src/thrusters.c:177:8:resizeFloatToInt8	3

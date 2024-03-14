@@ -51,7 +51,12 @@ void stabilizationInit()
 	}
 
 	/////////DEBUG!!!!////////////////////////////////////////////
-	rStabConstants[STAB_YAW].enable = true;
+	rStabConstants[STAB_YAW].enable = false;
+	rStabConstants[STAB_DEPTH].enable = false;
+	rStabConstants[STAB_LAG].enable = false;
+	rStabConstants[STAB_MARCH].enable = false;
+	rStabConstants[STAB_PITCH].enable = false;
+	rStabConstants[STAB_ROLL].enable = false;
 	//////////////////////////////////////////////////////////////
 
 	/////////////////////////////////////////////////////////////
@@ -87,7 +92,6 @@ void stabilizationInit()
 
 
     //upload coef
-	rStabConstants[STAB_YAW].enable = true;
 
 	rStabConstants[STAB_YAW].pJoyUnitCast = 1;
 	rStabConstants[STAB_YAW].pSpeedDyn = 0;
