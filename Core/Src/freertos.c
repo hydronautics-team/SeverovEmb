@@ -545,14 +545,8 @@ void tSilence_func(void const * argument)
 		}
 //	}
 	//HAL_GPIO_WritePin(GPIOE, RES_PC_2_Pin, GPIO_PIN_SET); // ONOFF
-<<<<<<< Updated upstream
-
-	xTimerStart(SilenceTimer, 1);
-	sin_counter+=1;
-=======
 	sin_counter++;
 	xTimerStart(SilenceTimer, 50);
->>>>>>> Stashed changes
   /* USER CODE END tSilence_func */
 }
 

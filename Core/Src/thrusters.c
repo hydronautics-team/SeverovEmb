@@ -16,6 +16,7 @@
 #include "communication.h"
 #include "checksum.h"
 
+uint8_t thruster_init = 0;
 
 void addMarchToSumm(float *velocity);
 void addLagToSumm(float *velocity);
@@ -24,7 +25,7 @@ void addYawToSumm(float *velocity);
 void addRollToSumm(float *velocity);
 void addPitchToSumm(float *velocity);
 
-uint8_t resizeFloatToUint8(float input);
+int8_t resizeFloatToInt8(float input);
 // velocity[i] = (KVMA[i][0]*Ux + KVMA[i][1]*Uy + KVMA[i][2]*Uz
 //+ KVMA[i][3]*Ugamma + KVMA[i][4]*Uteta + KVMA[i][5]*Upsi)*KVMA[i][6];
 float KVMA[6][5] = {
@@ -127,28 +128,6 @@ void formThrustVectors()
     velocity[i] = 0;
   }
 
-<<<<<<< Updated upstream
-  float Ux;
-  float Uy;
-  float Uz;
-  float Ugamma;
-  float Uteta;
-  float Upsi;
-
-  Ux = rJoySpeed.march;
-  Uy = rJoySpeed.lag;
-  Uz = input_value;//rStabState[STAB_DEPTH].outputSignal;
-  Upsi = rStabState[STAB_YAW].outputSignal;
-  Ugamma = rStabState[STAB_ROLL].outputSignal;
-  Uteta = rJoySpeed.pitch;
-
-  for (uint8_t i = 0; i < THRUSTERS_NUMBER; ++i)
-  {
-    velocity[i] = (KVMA[i][0]*Ux + KVMA[i][1]*Uy + KVMA[i][2]*Uz
-        + KVMA[i][3]*Ugamma + KVMA[i][4]*Uteta + KVMA[i][5]*Upsi)*KVMA[i][6];
-    rThrusters[i].desiredSpeed = resizeFloatToUint8(velocity[i]);
-  }
-=======
 //  float Ux;
 //  float Uy;
 //  float Uz;
@@ -192,14 +171,13 @@ void formThrustVectors()
     else
     	rThrusters[i].desiredSpeed = 0;
   	}
->>>>>>> Stashed changes
 
 }
 
-uint8_t resizeFloatToUint8(float input)
+int8_t resizeFloatToInt8(float input)
 {
   int32_t cast = (int32_t) input;
-  cast = cast / 0xFF;
+//  cast = cast / 0xFF;
   if (cast > 127) {
     cast = 127;
   }

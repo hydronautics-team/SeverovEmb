@@ -785,23 +785,9 @@ void ImuReceive(uint8_t *ReceiveBuf)
 	memcpy(&rSensors.pitch, ReceiveBuf + 8, sizeof(rSensors.pitch));
 	memcpy(&rSensors.roll, ReceiveBuf + 12, sizeof(rSensors.roll));
 
-<<<<<<< Updated upstream
-  	  memcpy(&rSensors.rollSpeed, ReceiveBuf + 16, sizeof(rSensors.yawSpeed));
-  	  memcpy(&rSensors.pitchSpeed, ReceiveBuf + 20, sizeof(rSensors.pitchSpeed));
-  	  memcpy(&rSensors.yawSpeed, ReceiveBuf + 24, sizeof(rSensors.rollSpeed));
-//
-//  	  memcpy(&rSensors.accelX, ReceiveBuf + 28, sizeof(rSensors.accelX));
-//  	  memcpy(&rSensors.accelY, ReceiveBuf + 32, sizeof(rSensors.accelY));
-//  	  memcpy(&rSensors.accelZ, ReceiveBuf + 36, sizeof(rSensors.accelZ));
-=======
 	memcpy(&rSensors.rollSpeed, ReceiveBuf + 16, sizeof(rSensors.rollSpeed));
 	memcpy(&rSensors.pitchSpeed, ReceiveBuf + 20, sizeof(rSensors.pitchSpeed));
 	memcpy(&rSensors.yawSpeed, ReceiveBuf + 24, sizeof(rSensors.yawSpeed));
-	//
-	//  	  memcpy(&rSensors.accelX, ReceiveBuf + 28, sizeof(rSensors.accelX));
-	//  	  memcpy(&rSensors.accelY, ReceiveBuf + 32, sizeof(rSensors.accelY));
-	//  	  memcpy(&rSensors.accelZ, ReceiveBuf + 36, sizeof(rSensors.accelZ));
->>>>>>> Stashed changes
 
 	rSensors.LastTick = xTaskGetTickCount();
 

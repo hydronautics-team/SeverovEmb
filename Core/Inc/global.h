@@ -15,11 +15,6 @@
 #include "messages.h"
 #include "math.h"
 
-extern int16_t input_value;
-extern int16_t alpha;
-extern int16_t omega;
-extern uint32_t sin_counter;
-
 extern struct robotState_s 						rState;
 extern struct robotThrusters_s 					rThrusters[THRUSTERS_NUMBER];
 extern struct robotSensors_s 					rSensors;
