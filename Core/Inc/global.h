@@ -50,5 +50,10 @@ extern uint8_t PressureResponseBuffer[PRESSURE_SENSOR_SIZE];
 
 extern uint8_t ContourSelected;
 
+extern int16_t input_value;
+extern int16_t alpha;
+extern float omega;
+extern uint32_t sin_counter;
+
 #endif
 

@@ -1,6 +1,15 @@
+<<<<<<< Updated upstream
 ../Core/Src/thrusters.c:39:6:thrustersInit	16	static
 ../Core/Src/thrusters.c:61:6:resetThrusters	16	static
 ../Core/Src/thrusters.c:76:6:fillThrustersRequest	40	static
 ../Core/Src/thrusters.c:107:6:fillThrustersResponse	32	static
 ../Core/Src/thrusters.c:123:6:formThrustVectors	64	static
 ../Core/Src/thrusters.c:153:9:resizeFloatToUint8	24	static
+=======
+../Core/Src/thrusters.c:42:6:thrustersInit	16	static
+../Core/Src/thrusters.c:64:6:resetThrusters	16	static
+../Core/Src/thrusters.c:79:6:fillThrustersRequest	32	static
+../Core/Src/thrusters.c:110:6:fillThrustersResponse	32	static
+../Core/Src/thrusters.c:126:6:formThrustVectors	72	static
+../Core/Src/thrusters.c:179:8:resizeFloatToInt8	24	static
+>>>>>>> Stashed changes

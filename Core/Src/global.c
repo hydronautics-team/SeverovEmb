@@ -29,6 +29,11 @@ uint8_t DevicesResponseBuffer[DEVICES_NUMBER][DEVICES_RESPONSE_LENGTH];
 uint8_t PressureResponseBuffer[PRESSURE_SENSOR_SIZE];
 
 int16_t input_value = 0;
+<<<<<<< Updated upstream
 int16_t alpha = 100;
 int16_t omega = 1;
+=======
+int16_t alpha = 20;
+float omega = 1;
+>>>>>>> Stashed changes
 uint32_t sin_counter = 0;

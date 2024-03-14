@@ -763,23 +763,29 @@ int16_t sign(int16_t in)
 
 void ImuReceive(uint8_t *ReceiveBuf)
 {
-	 // Check sync byte
-	 if ((ReceiveBuf[0] != 0xFA)&&(ReceiveBuf[1] != 0x01)&&(ReceiveBuf[2] != 0x08)&&(ReceiveBuf[3] != 0x01))
-		 return;
+	// Check sync byte
+	if ((ReceiveBuf[0] != 0xFA)||(ReceiveBuf[1] != 0x01)||(ReceiveBuf[2] != 0x28)||(ReceiveBuf[3] != 0x00))
+	{
+		++uartBus[IMU_UART].brokenRxCounter;
+		return;
+	}
+
+	rSensors.crc = (ReceiveBuf[28] << 8) | ReceiveBuf[29];
+	//crc length= IMU_RESPONSE_LENGTH - 1 sync byte - 2 bytes crc
+	uint16_t calculated_crc = calculateCRC(ReceiveBuf + 1, IMU_RESPONSE_LENGTH - 1 - 2);
+	if (rSensors.crc != calculated_crc)
+	{
+		++uartBus[IMU_UART].brokenRxCounter;
+		return;
+	}
 
 
-	 rSensors.crc = (ReceiveBuf[28] << 8) | ReceiveBuf[29];
-		 //crc length= IMU_RESPONSE_LENGTH - 1 sync byte - 2 bytes crc
-		 uint16_t calculated_crc = calculateCRC(ReceiveBuf + 1, IMU_RESPONSE_LENGTH - 1 - 2);
-		 if (rSensors.crc != calculated_crc)
-		 return;
 
+	memcpy(&rSensors.yaw, ReceiveBuf + 4, sizeof(rSensors.yaw));
+	memcpy(&rSensors.pitch, ReceiveBuf + 8, sizeof(rSensors.pitch));
+	memcpy(&rSensors.roll, ReceiveBuf + 12, sizeof(rSensors.roll));
 
-
-  	  memcpy(&rSensors.yaw, ReceiveBuf + 4, sizeof(rSensors.yaw));
-  	  memcpy(&rSensors.pitch, ReceiveBuf + 8, sizeof(rSensors.pitch));
-  	  memcpy(&rSensors.roll, ReceiveBuf + 12, sizeof(rSensors.roll));
-
+<<<<<<< Updated upstream
   	  memcpy(&rSensors.rollSpeed, ReceiveBuf + 16, sizeof(rSensors.yawSpeed));
   	  memcpy(&rSensors.pitchSpeed, ReceiveBuf + 20, sizeof(rSensors.pitchSpeed));
   	  memcpy(&rSensors.yawSpeed, ReceiveBuf + 24, sizeof(rSensors.rollSpeed));
@@ -787,11 +793,20 @@ void ImuReceive(uint8_t *ReceiveBuf)
 //  	  memcpy(&rSensors.accelX, ReceiveBuf + 28, sizeof(rSensors.accelX));
 //  	  memcpy(&rSensors.accelY, ReceiveBuf + 32, sizeof(rSensors.accelY));
 //  	  memcpy(&rSensors.accelZ, ReceiveBuf + 36, sizeof(rSensors.accelZ));
+=======
+	memcpy(&rSensors.rollSpeed, ReceiveBuf + 16, sizeof(rSensors.rollSpeed));
+	memcpy(&rSensors.pitchSpeed, ReceiveBuf + 20, sizeof(rSensors.pitchSpeed));
+	memcpy(&rSensors.yawSpeed, ReceiveBuf + 24, sizeof(rSensors.yawSpeed));
+	//
+	//  	  memcpy(&rSensors.accelX, ReceiveBuf + 28, sizeof(rSensors.accelX));
+	//  	  memcpy(&rSensors.accelY, ReceiveBuf + 32, sizeof(rSensors.accelY));
+	//  	  memcpy(&rSensors.accelZ, ReceiveBuf + 36, sizeof(rSensors.accelZ));
+>>>>>>> Stashed changes
 
-    rSensors.LastTick = xTaskGetTickCount();
+	rSensors.LastTick = xTaskGetTickCount();
 
 
-    ++uartBus[IMU_UART].successRxCounter;
+	++uartBus[IMU_UART].successRxCounter;
 }
 
 unsigned short calculateCRC(unsigned char data[], unsigned int length) {

@@ -505,6 +505,7 @@ void tTechCommTimer_callback(void const * argument)
 void tSilence_func(void const * argument)
 {
   /* USER CODE BEGIN tSilence_func */
+	input_value = alpha*sin(sin_counter * omega/1000.0);
 	if(fromTickToMs(xTaskGetTickCount()) - uartBus[SHORE_UART].lastMessage > UART_SWITCH_DELAY && counterRx == 0) {
 		input_value = alpha*sin(sin_counter * omega/1000.0);
 //		if(uartBus[SHORE_UART].huart == &huart1) {
@@ -544,9 +545,14 @@ void tSilence_func(void const * argument)
 		}
 //	}
 	//HAL_GPIO_WritePin(GPIOE, RES_PC_2_Pin, GPIO_PIN_SET); // ONOFF
+<<<<<<< Updated upstream
 
 	xTimerStart(SilenceTimer, 1);
 	sin_counter+=1;
+=======
+	sin_counter++;
+	xTimerStart(SilenceTimer, 50);
+>>>>>>> Stashed changes
   /* USER CODE END tSilence_func */
 }
 

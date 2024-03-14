@@ -127,6 +127,7 @@ void formThrustVectors()
     velocity[i] = 0;
   }
 
+<<<<<<< Updated upstream
   float Ux;
   float Uy;
   float Uz;
@@ -147,6 +148,51 @@ void formThrustVectors()
         + KVMA[i][3]*Ugamma + KVMA[i][4]*Uteta + KVMA[i][5]*Upsi)*KVMA[i][6];
     rThrusters[i].desiredSpeed = resizeFloatToUint8(velocity[i]);
   }
+=======
+//  float Ux;
+//  float Uy;
+//  float Uz;
+//  float Ugamma;
+//  float Uteta;
+//  float Upsi;
+
+  float U[6];
+
+//  Ux = rJoySpeed.march;
+//  Uy = rJoySpeed.lag;
+//  Uz = rStabState[STAB_DEPTH].outputSignal;
+//  Upsi = rStabState[STAB_YAW].outputSignal;
+//  Ugamma = rStabState[STAB_ROLL].outputSignal;
+//  Uteta = rJoySpeed.pitch;
+
+  U[STAB_MARCH] = rJoySpeed.march;
+  U[STAB_LAG] = rJoySpeed.lag;
+//  U[STAB_DEPTH] = rJoySpeed.depth;
+  U[STAB_DEPTH] = input_value;
+  U[STAB_YAW] = rJoySpeed.yaw;
+  U[STAB_ROLL] = rJoySpeed.roll;
+  U[STAB_PITCH] = rJoySpeed.pitch;
+
+  for(uint8_t i = 0; i < 6; i++)
+  {
+	if(rStabConstants[i].enable)
+		U[i] = rStabState[i].outputSignal;
+  }
+
+  for (uint8_t i = 0; i < THRUSTERS_NUMBER; ++i)
+  {
+    velocity[i] = KVMA[i][0]*U[STAB_MARCH] + KVMA[i][1]*U[STAB_LAG] + KVMA[i][2]*U[STAB_DEPTH]
+         + KVMA[i][3]*U[STAB_YAW] + KVMA[i][4]*U[STAB_ROLL];
+    if(velocity[i]<=12 && velocity[i]>=-12) //Thrusters dead zone asymmetric, +3 ... -11~-12
+    	velocity[i] = 0;
+    if(!thruster_init)
+    {
+    	rThrusters[i].desiredSpeed = resizeFloatToInt8(velocity[i]);
+    }
+    else
+    	rThrusters[i].desiredSpeed = 0;
+  	}
+>>>>>>> Stashed changes
 
 }
 

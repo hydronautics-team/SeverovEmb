@@ -52,6 +52,7 @@ struct uartBus_s {
 	// State of the bus
 	bool packageReceived; 			// Is new package received in this moment
 	bool packageTransmitted;		// Is new package transmitted in this moment (true if transmitted but not received)
+
 	uint16_t successRxCounter;		// Successfully received packages counter (checksum is correct + timeout not reached)
 	uint32_t brokenRxCounter;		// Broken received packages counter (incorrect checksum)
 	uint32_t outdatedRxCounter;		// Outdated received packages counter (timeout reached)

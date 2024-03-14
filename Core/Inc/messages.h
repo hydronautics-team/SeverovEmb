@@ -367,13 +367,23 @@ struct pressureResponse_s
 
 #define DELAY_LED_TASK 				100
 #define DELAY_THRUSTERS_TASK 		20
+<<<<<<< Updated upstream
 #define DELAY_DEVICES_TASK 			10
 #define DELAY_IMU_TASK 				10
+=======
+#define DELAY_DEVICES_TASK 			1000
+#define DELAY_IMU_TASK 				1
+>>>>>>> Stashed changes
 #define DELAY_PC_TASK 				10
 #define DELAY_SENSOR_TASK 			100
 #define DELAY_STABILIZATION_TASK 	10
 #define DELAY_TIMER_TASK 			30
+<<<<<<< Updated upstream
 #define DELAY_SILENCE    			1//1000
+=======
+//#define DELAY_SILENCE    			1000
+#define DELAY_SILENCE    			1
+>>>>>>> Stashed changes
 #define DELAY_UART_TIMEOUT    		50
 
 #define WAITING_DEVICES 			10
