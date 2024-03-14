@@ -27,6 +27,7 @@
 
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
+#include "moving_average.h"
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -75,6 +76,10 @@ int32_t press;
 float temperature;
 float depth_val;
 float altitude_val;
+
+Moving_Average_filter pressure_filter;
+Moving_Average_filter velocity_pressure_filter;
+
 /* USER CODE END 0 */
 
 /**
@@ -118,6 +123,9 @@ int main(void)
   MS5837_02BA_init(&hi2c1);
   MS5837_02BA_reset_pressure();
 
+  movingAverageInit(&pressure_filter, 50);
+  movingAverageInit(&velocity_pressure_filter, 50);
+
   /* USER CODE END 2 */
 
   /* Call init function for freertos objects (in freertos.c) */
@@ -129,15 +137,9 @@ int main(void)
   /* We should never get here as control is now taken by the scheduler */
   /* Infinite loop */
   /* USER CODE BEGIN WHILE */
- uint8_t buffer[30]={0};
- uint8_t buffer1[1]={0xAA};
 
   while (1)
   {
-	 // HAL_UART_Receive(&huart2,&buffer,20,1000);
-	 // HAL_UART_Transmit(&huart2,&buffer1,1,1000);
-//	  HAL_I2C_Master_Transmit(&hi2c1, DevAddress, pData, Size, Timeout)
-//	  HAL_Delay(200);
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */

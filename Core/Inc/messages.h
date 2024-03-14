@@ -36,7 +36,7 @@ struct thrustersRequest_s
 	uint8_t AA;
 	uint8_t type; // 0x01
 	uint8_t address;
-	int8_t velocity[8];
+	int8_t velocity[6];
 	int8_t pwm_servo;
 	uint8_t crc;
 };
@@ -136,23 +136,19 @@ struct shoreRequest_s
 {
 	uint8_t type;
 	uint8_t flags;
-	int16_t march;
-	int16_t lag;
-	int16_t depth;
-	int16_t roll;
-	int16_t pitch;
-	int16_t yaw;
-	int8_t light;
-	int8_t grab;
-	int8_t tilt;
-	int8_t grab_rotate;
-	int8_t dev1;
-	int8_t dev2;
-	int32_t lag_error;
-	uint8_t dev_flags;
 	uint8_t stabilize_flags;
-	uint8_t cameras;
-	uint8_t pc_reset;
+
+	float march;
+	float lag;
+	float depth;
+	float roll;
+	float pitch;
+	float yaw;
+
+	int8_t drop;
+	int8_t grab;
+
+
 	uint16_t checksum;
 };
 
@@ -237,7 +233,7 @@ struct shoreResponseDirect_s
 	uint16_t checksum;
 };
 
-#define SHORE_RESPONSE_LENGTH			70
+#define SHORE_RESPONSE_LENGTH			20
 
 struct shoreResponse_s
 {
@@ -245,22 +241,10 @@ struct shoreResponse_s
     float pitch;
     float yaw;
 
-    float rollSpeed;
-    float pitchSpeed;
-    float yawSpeed;
-
     float pressure;
-    float in_pressure;
 
-    uint8_t dev_state;
-    int16_t leak_data;
-
-    uint16_t thrusterCurrent[THRUSTERS_NUMBER];
-    uint16_t devCurrent[DEVICES_NUMBER];
-
-    uint16_t vma_errors;
-    uint16_t dev_errors;
-    uint8_t pc_errors;
+    uint8_t dropper;
+    uint8_t grabber;
 
     uint16_t checksum;
 };
@@ -370,7 +354,10 @@ struct pressureResponse_s
 #define DELAY_DEVICES_TASK 			1000
 #define DELAY_IMU_TASK 				1
 #define DELAY_PC_TASK 				10
-#define DELAY_SENSOR_TASK 			100
+//Debug
+#define DELAY_SENSOR_TASK 			10
+//#define DELAY_SENSOR_TASK 			100
+//
 #define DELAY_STABILIZATION_TASK 	10
 #define DELAY_TIMER_TASK 			30
 //#define DELAY_SILENCE    			1000

@@ -16,7 +16,6 @@
 #include "communication.h"
 #include "checksum.h"
 
-uint8_t thruster_init = 0;
 
 void addMarchToSumm(float *velocity);
 void addLagToSumm(float *velocity);
@@ -24,6 +23,8 @@ void addDepthToSumm(float *velocity);
 void addYawToSumm(float *velocity);
 void addRollToSumm(float *velocity);
 void addPitchToSumm(float *velocity);
+
+uint8_t thruster_init = 0;
 
 int8_t resizeFloatToInt8(float input);
 // velocity[i] = (KVMA[i][0]*Ux + KVMA[i][1]*Uy + KVMA[i][2]*Uz
@@ -82,23 +83,7 @@ void fillThrustersRequest(uint8_t *buf, uint8_t thruster)
     res.type = 0x01;
     res.address = 0xAF;
     for(int i=0; i<THRUSTERS_NUMBER;i++){
-    	int16_t velocity = rThrusters[i].desiredSpeed;
-
-
-    	// Inverting
-    	if(rThrusters[i].inverse) {
-//    		velocity *= -1;
-    	}
-
-    	// Multiplier constants
-    	if(velocity > 0) {
-    		velocity = (int16_t) ( (float) (velocity) * rThrusters[i].kForward);
-    	}
-    	else if(velocity < 0) {
-    		velocity = (int16_t) ((float) (velocity) * rThrusters[i].kBackward);
-    	}
-
-    	res.velocity[i] = velocity;
+    	res.velocity[i] = rThrusters[i].desiredSpeed;
     }
     res.pwm_servo = rDevice[GRAB].force;
     memcpy((void*)buf, (void*)&res, THRUSTERS_REQUEST_LENGTH);
@@ -146,7 +131,6 @@ void formThrustVectors()
 
   U[STAB_MARCH] = rJoySpeed.march;
   U[STAB_LAG] = rJoySpeed.lag;
-//  U[STAB_DEPTH] = rJoySpeed.depth;
   U[STAB_DEPTH] = input_value;
   U[STAB_YAW] = rJoySpeed.yaw;
   U[STAB_ROLL] = rJoySpeed.roll;

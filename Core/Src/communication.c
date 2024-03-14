@@ -65,8 +65,10 @@ void variableInit()
 	rSensors.old_yaw = 0;
 	rSensors.spins = 0;
 
+	rSensors.pressure_raw = 0;
 	rSensors.pressure = 0;
 	rSensors.pressure_null = 0;
+	rSensors.last_pressure = 0;
 
 	rSensors.rollSpeed = 0;
 	rSensors.pitchSpeed = 0;
@@ -313,7 +315,7 @@ void ShoreReceive()
 		for(uint8_t i=0; i<SHORE_REQUEST_MODES_NUMBER; ++i) {
 			if(uartBus[SHORE_UART].rxBuffer[0] == ShoreCodes[i]) {
 				counterRx = 1;
-				uartBus[SHORE_UART].rxLength = 5;//ShoreLength[i]-1;
+				uartBus[SHORE_UART].rxLength = ShoreLength[i]-1;
 				HAL_UART_Receive_IT(uartBus[SHORE_UART].huart, uartBus[SHORE_UART].rxBuffer+1, uartBus[SHORE_UART].rxLength);
 				xTimerStartFromISR(UARTTimer, &xHigherPriorityTaskWoken);
 				break;
@@ -443,19 +445,19 @@ void ShoreRequest(uint8_t *requestBuf)
         if (rDevice[GRAB].force < -127) {
             rDevice[GRAB].force = -127;
         }
-        rDevice[TILT].force = req.tilt;
+        rDevice[TILT].force = req.drop;
         if (rDevice[TILT].force < -127) {
         	rDevice[TILT].force = -127;
         }
-        rDevice[GRAB_ROTATION].force  = req.grab_rotate;
-        if (rDevice[GRAB_ROTATION].force < -127) {
-            rDevice[GRAB_ROTATION].force = -127;
-        }
+//        rDevice[GRAB_ROTATION].force  = req.grab_rotate;
+//        if (rDevice[GRAB_ROTATION].force < -127) {
+//            rDevice[GRAB_ROTATION].force = -127;
+//        }
 
-        rDevice[DEV1].force = req.dev1;
-        rDevice[DEV2].force = req.dev2;
+//        rDevice[DEV1].force = req.dev1;
+//        rDevice[DEV2].force = req.dev2;
 
-        rState.lag_error = (float) req.lag_error;
+//        rState.lag_error = (float) req.lag_error;
 
         rSensors.startIMU = PickBit(req.stabilize_flags, SHORE_STABILIZE_IMU_BIT);
 
@@ -465,20 +467,20 @@ void ShoreRequest(uint8_t *requestBuf)
         	flashWriteSettings(&config);
         }
 
-        tempCameraNum = req.cameras;
+//        tempCameraNum = req.cameras;
 
         uint8_t old_reset = rComputer.reset;
-        if(old_reset != req.pc_reset) {
-            if(req.pc_reset == PC_ON_CODE) {
+//        if(old_reset != req.pc_reset) {
+//            if(req.pc_reset == PC_ON_CODE) {
    //         	HAL_GPIO_WritePin(PC_CONTROL1_GPIO_Port, PC_CONTROL1_Pin, GPIO_PIN_RESET); // RESET
      //       	HAL_GPIO_WritePin(PC_CONTROL2_GPIO_Port, PC_CONTROL2_Pin, GPIO_PIN_RESET); // ONOFF
-            }
-            else if(req.pc_reset == PC_OFF_CODE) {
+//            }
+//            else if(req.pc_reset == PC_OFF_CODE) {
  //           	HAL_GPIO_WritePin(PC_CONTROL1_GPIO_Port, PC_CONTROL1_Pin, GPIO_PIN_SET); // RESET
    //         	HAL_GPIO_WritePin(PC_CONTROL2_GPIO_Port, PC_CONTROL2_Pin, GPIO_PIN_SET); // ONOFF
-            }
-        }
-        rComputer.reset = req.pc_reset;
+//            }
+//        }
+//        rComputer.reset = req.pc_reset;
 
         bool wasEnabled = rStabConstants[STAB_YAW].enable;
         rStabConstants[STAB_YAW].enable = PickBit(req.stabilize_flags, SHORE_STABILIZE_YAW_BIT);
@@ -680,18 +682,18 @@ void ShoreResponse(uint8_t *responseBuf)
     res.roll = rSensors.roll;
     res.pitch = rSensors.pitch;
     res.yaw =  rSensors.yaw;//*rStabState[STAB_YAW].posSignal;//rSensors.yaw;
-    res.rollSpeed = rSensors.rollSpeed;
-    res.pitchSpeed = rSensors.pitchSpeed;
-    res.yawSpeed = rSensors.yawSpeed;
 
     res.pressure = rSensors.pressure;
+    res.dropper = 0;
+    res.grabber = 0;
 
-    res.vma_errors = 0x55;         //!!!!!TODO!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+   // res.vma_errors = 0x55;         //!!!!!TODO!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
     // TODO do this properly pls
-    res.dev_errors = 0;//robot->device.errors;
-    res.pc_errors = rComputer.errors;
+   // res.dev_errors = 0;//robot->device.errors;
+  //  res.pc_errors = rComputer.errors;
 
-    memcpy((void*)responseBuf, (void*)&res, SHORE_RESPONSE_LENGTH);
+    memcpy((void*)responseBuf, (void*)&res, SHORE_RESPONSE_LENGTH-2);
+
     AddCrc16Checksumm(responseBuf, SHORE_RESPONSE_LENGTH);
 }
 
@@ -763,22 +765,21 @@ int16_t sign(int16_t in)
 
 void ImuReceive(uint8_t *ReceiveBuf)
 {
-	// Check sync byte
-	if ((ReceiveBuf[0] != 0xFA)||(ReceiveBuf[1] != 0x01)||(ReceiveBuf[2] != 0x28)||(ReceiveBuf[3] != 0x00))
-	{
-		++uartBus[IMU_UART].brokenRxCounter;
-		return;
-	}
+	 // Check sync byte
+	 if ((ReceiveBuf[0] != 0xFA)||(ReceiveBuf[1] != 0x01)||(ReceiveBuf[2] != 0x28)||(ReceiveBuf[3] != 0x00))
+	 {
+		 ++uartBus[IMU_UART].brokenRxCounter;
+		 return;
+	 }
 
-	rSensors.crc = (ReceiveBuf[28] << 8) | ReceiveBuf[29];
-	//crc length= IMU_RESPONSE_LENGTH - 1 sync byte - 2 bytes crc
-	uint16_t calculated_crc = calculateCRC(ReceiveBuf + 1, IMU_RESPONSE_LENGTH - 1 - 2);
-	if (rSensors.crc != calculated_crc)
-	{
-		++uartBus[IMU_UART].brokenRxCounter;
-		return;
-	}
-
+	 rSensors.crc = (ReceiveBuf[28] << 8) | ReceiveBuf[29];
+	 //crc length= IMU_RESPONSE_LENGTH - 1 sync byte - 2 bytes crc
+	 uint16_t calculated_crc = calculateCRC(ReceiveBuf + 1, IMU_RESPONSE_LENGTH - 1 - 2);
+	 if (rSensors.crc != calculated_crc)
+	 {
+		 ++uartBus[IMU_UART].brokenRxCounter;
+		 return;
+	 }
 
 
 	memcpy(&rSensors.yaw, ReceiveBuf + 4, sizeof(rSensors.yaw));
@@ -788,6 +789,10 @@ void ImuReceive(uint8_t *ReceiveBuf)
 	memcpy(&rSensors.rollSpeed, ReceiveBuf + 16, sizeof(rSensors.rollSpeed));
 	memcpy(&rSensors.pitchSpeed, ReceiveBuf + 20, sizeof(rSensors.pitchSpeed));
 	memcpy(&rSensors.yawSpeed, ReceiveBuf + 24, sizeof(rSensors.yawSpeed));
+	//
+	//  	  memcpy(&rSensors.accelX, ReceiveBuf + 28, sizeof(rSensors.accelX));
+	//  	  memcpy(&rSensors.accelY, ReceiveBuf + 32, sizeof(rSensors.accelY));
+	//  	  memcpy(&rSensors.accelZ, ReceiveBuf + 36, sizeof(rSensors.accelZ));
 
 	rSensors.LastTick = xTaskGetTickCount();
 
