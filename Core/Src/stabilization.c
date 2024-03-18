@@ -60,32 +60,32 @@ void stabilizationInit()
 	//////////////////////////////////////////////////////////////
 
 	/////////////////////////////////////////////////////////////
-    rStabState[STAB_ROLL].inputSignal = &rMonitorInput.roll;
+    rStabState[STAB_ROLL].inputSignal = &rJoySpeed.roll;
     rStabState[STAB_ROLL].speedSignal = &rSensors.rollSpeed;
     rStabState[STAB_ROLL].posSignal = &rSensors.roll;
     rStabConstants[STAB_ROLL].joyIntegration = false;
     /////////////////////////////////////////////////////////////
-    rStabState[STAB_PITCH].inputSignal = &rMonitorInput.pitch;
+    rStabState[STAB_PITCH].inputSignal = &rJoySpeed.pitch;
     rStabState[STAB_PITCH].speedSignal = &rSensors.pitchSpeed;
     rStabState[STAB_PITCH].posSignal = &rSensors.pitch;
     rStabConstants[STAB_PITCH].joyIntegration = true;
     /////////////////////////////////////////////////////////////
-    rStabState[STAB_YAW].inputSignal = &rMonitorInput.yaw;
+    rStabState[STAB_YAW].inputSignal = &rJoySpeed.yaw;
     rStabState[STAB_YAW].speedSignal = &rSensors.yawSpeed;
     rStabState[STAB_YAW].posSignal = &rSensors.yaw;//&rStabState[STAB_YAW].speedIntegral;
     rStabConstants[STAB_YAW].joyIntegration = true;
     /////////////////////////////////////////////////////////////
-    rStabState[STAB_DEPTH].inputSignal = &rMonitorInput.depth;
+    rStabState[STAB_DEPTH].inputSignal = &rJoySpeed.depth;
     rStabState[STAB_DEPTH].speedSignal = &rSensors.velocity_pressure;//&rStabState[STAB_DEPTH].posDerivative;
     rStabState[STAB_DEPTH].posSignal = &rSensors.pressure;
     rStabConstants[STAB_DEPTH].joyIntegration = false;
     /////////////////////////////////////////////////////////////
-    rStabState[STAB_LAG].inputSignal = &rMonitorInput.lag;
+    rStabState[STAB_LAG].inputSignal = &rJoySpeed.lag;
     rStabState[STAB_LAG].speedSignal = &rStabState[STAB_LAG].posDerivative;
     rStabState[STAB_LAG].posSignal = &rState.lag_error;
     rStabConstants[STAB_LAG].joyIntegration = false;
     /////////////////////////////////////////////////////////////
-    rStabState[STAB_MARCH].inputSignal = &rMonitorInput.march;
+    rStabState[STAB_MARCH].inputSignal = &rJoySpeed.march;
     rStabState[STAB_MARCH].speedSignal = &rStabState[STAB_MARCH].posDerivative;
     rStabState[STAB_MARCH].posSignal = &rJoySpeed.march;
     rStabConstants[STAB_MARCH].joyIntegration = false;
