@@ -70,6 +70,8 @@ void variableInit()
 	rSensors.pressure_null = 0;
 	rSensors.last_pressure = 0;
 
+	rSensors.pressure_watchdog_counter = 0;
+
 	rSensors.rollSpeed = 0;
 	rSensors.pitchSpeed = 0;
 	rSensors.yawSpeed = 0;

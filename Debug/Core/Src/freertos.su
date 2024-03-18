@@ -7,7 +7,7 @@
 ../Core/Src/freertos.c:355:6:func_tStabilizationTask	24	static
 ../Core/Src/freertos.c:384:6:func_tDevCommTask	24	static
 ../Core/Src/freertos.c:423:6:func_tSensCommTask	24	static
-../Core/Src/freertos.c:453:6:func_tPcCommTask	24	static
-../Core/Src/freertos.c:466:6:func_tUartTimer	24	static
-../Core/Src/freertos.c:508:6:tTechCommTimer_callback	16	static
-../Core/Src/freertos.c:516:6:tSilence_func	32	static
+../Core/Src/freertos.c:462:6:func_tPcCommTask	24	static
+../Core/Src/freertos.c:475:6:func_tUartTimer	24	static
+../Core/Src/freertos.c:517:6:tTechCommTimer_callback	16	static
+../Core/Src/freertos.c:525:6:tSilence_func	32	static

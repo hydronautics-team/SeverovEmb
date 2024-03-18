@@ -13,6 +13,7 @@
 
 /* Init MS5837_30BA sensor. */
 bool MS5837_02BA_init(I2C_HandleTypeDef * hi2c);
+bool MS5837_02BA_reinit();
 bool MS5837_02BA_begin(I2C_HandleTypeDef * hi2c);// Calls init()
 extern int32_t initial_pressure;
 

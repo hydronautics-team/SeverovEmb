@@ -144,6 +144,8 @@ struct robotSensors_s {
 	float last_pressure;
 	float velocity_pressure;
 
+	uint8_t pressure_watchdog_counter;
+
 	float in_pressure;
 
 	float leak;

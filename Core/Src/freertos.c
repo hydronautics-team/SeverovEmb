@@ -433,9 +433,18 @@ void func_tSensCommTask(void const * argument)
     	float pressure = movingAverageIterate(&pressure_filter, rSensors.pressure_raw);
     	rSensors.last_pressure = rSensors.pressure;
 		rSensors.pressure = pressure;
+		if(rSensors.last_pressure == rSensors.pressure)
+			rSensors.pressure_watchdog_counter++;
+		else
+			rSensors.pressure_watchdog_counter = 0;
 		rSensors.velocity_pressure = movingAverageIterate(&velocity_pressure_filter,
 				(rSensors.pressure - rSensors.last_pressure)*1000/DELAY_SENSOR_TASK);
 		xSemaphoreGive(mutDataHandle);
+    }
+    if(rSensors.pressure_watchdog_counter >= 250)
+    {
+    	MS5837_02BA_reinit();
+    	rSensors.pressure_watchdog_counter = 0;
     }
     osDelayUntil(&sysTime, DELAY_SENSOR_TASK); // �?справленная задержка
 //    osDelayUntil(&sysTime, pressure_delay);
