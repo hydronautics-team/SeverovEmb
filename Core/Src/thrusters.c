@@ -146,6 +146,13 @@ void formThrustVectors()
 //  Ugamma = rStabState[STAB_ROLL].outputSignal;
 //  Uteta = rJoySpeed.pitch;
 
+  if(thruster_init)
+  {
+	  for (uint8_t i = 0; i < THRUSTERS_NUMBER; ++i)
+	  	rThrusters[i].desiredSpeed = 0;
+	  return;
+  }
+
   U[STAB_MARCH] = rMonitorInput.march;
   U[STAB_LAG] = rMonitorInput.lag;
   U[STAB_DEPTH] = rMonitorInput.depth;
@@ -159,18 +166,26 @@ void formThrustVectors()
 		U[i] = rStabState[i].outputSignal;
   }
 
+  float thrusters_sum = 0;
+  float lag_march_sum = 0;
+
   for (uint8_t i = 0; i < THRUSTERS_NUMBER; ++i)
   {
     velocity[i] = KVMA[i][0]*U[STAB_MARCH] + KVMA[i][1]*U[STAB_LAG] + KVMA[i][2]*U[STAB_DEPTH]
          + KVMA[i][3]*U[STAB_YAW] + KVMA[i][4]*U[STAB_ROLL];
-    if(!thruster_init)
-    {
-    	rThrusters[i].desiredSpeed = resizeFloatToInt8(velocity[i]);
-    }
-    else
-    	rThrusters[i].desiredSpeed = 0;
-  	}
+    thrusters_sum += resizeFloatToInt8(velocity[i]);
+    lag_march_sum += resizeFloatToInt8(KVMA[i][0]*U[STAB_MARCH] + KVMA[i][1]*U[STAB_LAG]);
+  }
 
+  float reduction = 1 - (thrusters_sum-THRUSTERS_NUMBER*80)/lag_march_sum;
+
+  if(reduction > 0)
+	  for (uint8_t i = 0; i < THRUSTERS_NUMBER; ++i)
+	      velocity[i] = reduction*(KVMA[i][0]*U[STAB_MARCH] + KVMA[i][1]*U[STAB_LAG]) + KVMA[i][2]*U[STAB_DEPTH]
+	           + KVMA[i][3]*U[STAB_YAW] + KVMA[i][4]*U[STAB_ROLL];
+
+  for (uint8_t i = 0; i < THRUSTERS_NUMBER; ++i)
+	rThrusters[i].desiredSpeed = resizeFloatToInt8(velocity[i]);
 }
 
 int8_t resizeFloatToInt8(float input)
