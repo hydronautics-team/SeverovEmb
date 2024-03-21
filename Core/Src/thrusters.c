@@ -146,12 +146,18 @@ void formThrustVectors()
 //  Ugamma = rStabState[STAB_ROLL].outputSignal;
 //  Uteta = rJoySpeed.pitch;
 
-  U[STAB_MARCH] = rMonitorInput.march;
-  U[STAB_LAG] = rMonitorInput.lag;
-  U[STAB_DEPTH] = rMonitorInput.depth;
-  U[STAB_YAW] = rMonitorInput.yaw;
-  U[STAB_ROLL] = rMonitorInput.roll;
-  U[STAB_PITCH] = rMonitorInput.pitch;
+//  U[STAB_MARCH] = rMonitorInput.march;
+//  U[STAB_LAG] = rMonitorInput.lag;
+//  U[STAB_DEPTH] = rMonitorInput.depth;
+//  U[STAB_YAW] = rMonitorInput.yaw;
+//  U[STAB_ROLL] = rMonitorInput.roll;
+//  U[STAB_PITCH] = rMonitorInput.pitch;
+  U[STAB_MARCH] = rJoySpeed.march;
+  U[STAB_LAG] = rJoySpeed.lag;
+  U[STAB_DEPTH] = rJoySpeed.depth;
+  U[STAB_YAW] = rJoySpeed.yaw;
+  U[STAB_ROLL] = rJoySpeed.roll;
+  U[STAB_PITCH] = rJoySpeed.pitch;
 
   for(uint8_t i = 0; i < 6; i++)
   {

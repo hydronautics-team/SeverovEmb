@@ -353,7 +353,7 @@ struct pressureResponse_s
 #define DELAY_THRUSTERS_TASK 		20
 #define DELAY_DEVICES_TASK 			1000
 #define DELAY_IMU_TASK 				10
-#define DELAY_PC_TASK 				10
+#define DELAY_PC_TASK 				1000
 //Debug
 #define DELAY_SENSOR_TASK 			10
 //#define DELAY_SENSOR_TASK 			100

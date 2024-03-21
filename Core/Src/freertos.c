@@ -98,6 +98,14 @@ osStaticMutexDef_t mutDataControlBlock;
 /* Private function prototypes -----------------------------------------------*/
 /* USER CODE BEGIN FunctionPrototypes */
 void nullIntArray(uint8_t *array, uint8_t size);
+
+uint8_t led_task = 0;
+uint8_t vma_task = 0;
+uint8_t imu_task = 0;
+uint8_t stab_task = 0;
+uint8_t dev_task = 0;
+uint8_t sens_task = 0;
+uint8_t pc_task = 0;
 /* USER CODE END FunctionPrototypes */
 
 void func_tLedBlinkingTask(void const * argument);
@@ -219,7 +227,7 @@ void MX_FREERTOS_Init(void) {
   tDevCommTaskHandle = osThreadCreate(osThread(tDevCommTask), NULL);
 
   /* definition and creation of tSensCommTask */
-  osThreadStaticDef(tSensCommTask, func_tSensCommTask, osPriorityNormal, 0, 128, tSensCommTaskBuffer, &tSensCommTaskControlBlock);
+  osThreadStaticDef(tSensCommTask, func_tSensCommTask, osPriorityBelowNormal, 0, 128, tSensCommTaskBuffer, &tSensCommTaskControlBlock);
   tSensCommTaskHandle = osThreadCreate(osThread(tSensCommTask), NULL);
 
   /* definition and creation of tPcCommTask */
@@ -247,6 +255,7 @@ void func_tLedBlinkingTask(void const * argument)
   /* Infinite loop */
   for(;;)
   {
+	  led_task = !led_task;
 	  toggle_counter++;
         HAL_GPIO_TogglePin(GPIOB, led1_Pin);
         osDelayUntil(&sysTime, DELAY_LED_TASK);
@@ -268,12 +277,14 @@ void func_tLedBlinkingTask(void const * argument)
 void func_tVmaCommTask(void const * argument)
 {
   /* USER CODE BEGIN func_tVmaCommTask */
+
 	uint32_t sysTime = osKernelSysTick();
 	uint8_t transaction = 0;
 	HAL_GPIO_WritePin(RE_DE_GPIO_Port,RE_DE_Pin,GPIO_PIN_SET);
 	/* Infinite loop */
 	for(;;)
 	{
+		vma_task = 1;
 		if(xSemaphoreTake(mutDataHandle, (TickType_t) DELAY_THRUSTERS_TASK) == pdTRUE) {
 			fillThrustersRequest(ThrustersRequestBuffer, transaction);
 			xSemaphoreGive(mutDataHandle);
@@ -285,7 +296,8 @@ void func_tVmaCommTask(void const * argument)
 		uartBus[THRUSTERS_UART].rxBuffer = ThrustersResponseBuffer[transaction];
 		uartBus[THRUSTERS_UART].rxLength = THRUSTERS_RESPONSE_LENGTH;
 
-		transmitAndReceive(&uartBus[THRUSTERS_UART], false);
+		if(!transmitAndReceive(&uartBus[THRUSTERS_UART], false))
+			return;
 
 		if(xSemaphoreTake(mutDataHandle, (TickType_t) DELAY_THRUSTERS_TASK) == pdTRUE) {
 			fillThrustersResponse(ThrustersResponseBuffer[transaction], transaction);
@@ -293,6 +305,7 @@ void func_tVmaCommTask(void const * argument)
 		}
 
 		transaction = (transaction + 1) % THRUSTERS_NUMBER;
+		vma_task = 0;
 		osDelayUntil(&sysTime, DELAY_THRUSTERS_TASK);
 	}
   /* USER CODE END func_tVmaCommTask */
@@ -312,6 +325,7 @@ void func_tImuCommTask(void const * argument)
   /* Infinite loop */
   for(;;)
   {
+	  imu_task = 1;
 	  	if(rSensors.startIMU) {
 			uartBus[IMU_UART].txBuffer = ImuStartRequestBuffer;
 			uartBus[IMU_UART].txLength = IMU_REQUEST_LENGTH_AC;
@@ -321,7 +335,14 @@ void func_tImuCommTask(void const * argument)
 			uartBus[IMU_UART].txLength = IMU_REQUEST_LENGTH;
 	  		transmitPackage(&uartBus[IMU_UART], false);
 
-	  		rSensors.pressure_null = rSensors.pressure;
+	  		if(rSensors.pressure > 2000 || rSensors.pressure < -2000)
+	  		{
+	  			rSensors.pressure_null = 0;
+	  		}
+	  		else
+	  		{
+	  			rSensors.pressure_null = rSensors.pressure;
+	  		}
 	  		rSensors.startIMU = false;
 	  	}
 	  	else {
@@ -339,7 +360,7 @@ void func_tImuCommTask(void const * argument)
 	  		}
 
 	  	}
-
+	  	imu_task = 0;
 	  	osDelayUntil(&sysTime, DELAY_IMU_TASK);
   }
   /* USER CODE END func_tImuCommTask */
@@ -359,6 +380,7 @@ void func_tStabilizationTask(void const * argument)
 	/* Infinite loop */
 	for(;;)
 	{
+		stab_task = !stab_task;
 		if(xSemaphoreTake(mutDataHandle, (TickType_t) DELAY_STABILIZATION_TASK) == pdTRUE) {
 			for(uint8_t i=0; i<STABILIZATION_AMOUNT; i++) {
 				if (rStabConstants[i].enable) {
@@ -389,6 +411,7 @@ void func_tDevCommTask(void const * argument)
   /* Infinite loop */
   for(;;)
   {
+	  dev_task = !dev_task;
         if(xSemaphoreTake(mutDataHandle, (TickType_t) DELAY_DEVICES_TASK) == pdTRUE) {
             DevicesRequestUpdate(DevicesRequestBuffer, transaction);
             xSemaphoreGive(mutDataHandle);
@@ -427,13 +450,14 @@ void func_tSensCommTask(void const * argument)
   /* Infinite loop */
   for(;;)
   {
+	  sens_task = !sens_task;
     if(xSemaphoreTake(mutDataHandle, (TickType_t) DELAY_SENSOR_TASK) == pdTRUE) {
 //      MS5837_read(i2cBus[DEV_I2C].hi2c);
     	rSensors.pressure_raw = MS5837_02BA_get_actual_pressure();
     	float pressure = movingAverageIterate(&pressure_filter, rSensors.pressure_raw);
     	rSensors.last_pressure = rSensors.pressure;
 		rSensors.pressure = pressure;
-		if(rSensors.last_pressure == rSensors.pressure)
+		if(rSensors.last_pressure == rSensors.pressure || rSensors.pressure > 2000 || rSensors.pressure < -2000)
 			rSensors.pressure_watchdog_counter++;
 		else
 			rSensors.pressure_watchdog_counter = 0;
@@ -466,6 +490,7 @@ void func_tPcCommTask(void const * argument)
   /* Infinite loop */
   for(;;)
   {
+	  pc_task = !pc_task;
 	  osDelayUntil(&sysTime, DELAY_PC_TASK);
   }
   /* USER CODE END func_tPcCommTask */
