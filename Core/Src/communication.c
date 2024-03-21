@@ -284,6 +284,8 @@ void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart)
 		ShoreReceive();
 		return;
 	}
+	if(huart == uartBus[IMU_UART].huart)
+		HAL_UART_Receive_IT(uartBus[IMU_UART].huart, uartBus[IMU_UART].rxBuffer, uartBus[IMU_UART].rxLength);
 
 	struct uartBus_s *bus = 0;
 	for(uint8_t i=0; i<UART_NUMBER; i++) {
