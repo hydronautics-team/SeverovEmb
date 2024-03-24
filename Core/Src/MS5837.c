@@ -82,7 +82,7 @@ bool MS5837_02BA_reinit(){
 	HAL_I2C_DeInit(MS5837_hi2c);
 	HAL_I2C_Init(MS5837_hi2c);
 	MS5837_I2C_State = MS5837_I2C_NONE;
-	if(HAL_I2C_Master_Transmit(MS5837_hi2c, DEVICE_ADDR, &RES_DEVICE_COMM, COMMAND_LENGTH, HAL_MAX_DELAY) != HAL_OK){
+	if(HAL_I2C_Master_Transmit(MS5837_hi2c, DEVICE_ADDR, &RES_DEVICE_COMM, COMMAND_LENGTH, 100) != HAL_OK){
 		return false;
 	}
 	//receiving C1 - C6
@@ -90,8 +90,8 @@ bool MS5837_02BA_reinit(){
 	for (uint8_t i = 0; i < 7; i++) {
 		uint8_t prom_buff[2];
 		prom_addr += 2;
-		HAL_I2C_Master_Transmit(MS5837_hi2c, DEVICE_ADDR, &prom_addr, COMMAND_LENGTH, HAL_MAX_DELAY);
-		HAL_I2C_Master_Receive(MS5837_hi2c, DEVICE_ADDR, prom_buff, PROM_LENGTH, HAL_MAX_DELAY);
+		HAL_I2C_Master_Transmit(MS5837_hi2c, DEVICE_ADDR, &prom_addr, COMMAND_LENGTH, 100);
+		HAL_I2C_Master_Receive(MS5837_hi2c, DEVICE_ADDR, prom_buff, PROM_LENGTH, 100);
 		C[i] = (prom_buff[0] << 8) | (prom_buff[1]);
 	}
 	return true;

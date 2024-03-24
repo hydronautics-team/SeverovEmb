@@ -268,6 +268,12 @@ void HAL_UART_TxCpltCallback(UART_HandleTypeDef *huart)
 		return;
 	}
 
+	if(huart == uartBus[IMU_UART].huart)
+	{
+	   HAL_UART_Receive_IT(uartBus[IMU_UART].huart, uartBus[IMU_UART].rxBuffer, uartBus[IMU_UART].rxLength);
+	}
+
+
 	struct uartBus_s *bus = 0;
 	for(uint8_t i=0; i<UART_NUMBER; i++) {
 		if(uartBus[i].huart == huart) {
@@ -777,11 +783,11 @@ void ImuReceive(uint8_t *ReceiveBuf)
 	 rSensors.crc = (ReceiveBuf[28] << 8) | ReceiveBuf[29];
 	 //crc length= IMU_RESPONSE_LENGTH - 1 sync byte - 2 bytes crc
 	 uint16_t calculated_crc = calculateCRC(ReceiveBuf + 1, IMU_RESPONSE_LENGTH - 1 - 2);
-	 if (rSensors.crc != calculated_crc)
-	 {
-		 ++uartBus[IMU_UART].brokenRxCounter;
-		 return;
-	 }
+//	 if (rSensors.crc != calculated_crc)
+//	 {
+//		 ++uartBus[IMU_UART].brokenRxCounter;
+//		 return;
+//	 }
 
 
 

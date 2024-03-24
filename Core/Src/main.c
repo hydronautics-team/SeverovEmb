@@ -119,7 +119,7 @@ int main(void)
   MX_TIM7_Init();
   /* USER CODE BEGIN 2 */
 
-//  HAL_Delay(30e3); //30 seconds delay to start PC
+  HAL_Delay(30000); //30 seconds delay to start PC
   MS5837_02BA_init(&hi2c1);
   MS5837_02BA_reset_pressure();
 

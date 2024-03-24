@@ -199,7 +199,7 @@ void MX_FREERTOS_Init(void) {
 
   /* Create the thread(s) */
   /* definition and creation of tLedBlinkingTask */
-  osThreadStaticDef(tLedBlinkingTask, func_tLedBlinkingTask, osPriorityLow, 0, 128, tLedBlinkingTaskBuffer, &tLedBlinkingTaskControlBlock);
+  osThreadStaticDef(tLedBlinkingTask, func_tLedBlinkingTask, osPriorityIdle, 0, 128, tLedBlinkingTaskBuffer, &tLedBlinkingTaskControlBlock);
   tLedBlinkingTaskHandle = osThreadCreate(osThread(tLedBlinkingTask), NULL);
 
   /* definition and creation of tVmaCommTask */
@@ -211,7 +211,7 @@ void MX_FREERTOS_Init(void) {
   tImuCommTaskHandle = osThreadCreate(osThread(tImuCommTask), NULL);
 
   /* definition and creation of tStabilizationTask */
-  osThreadStaticDef(tStabilizationTask, func_tStabilizationTask, osPriorityIdle, 0, 128, tStabilizationTaskBuffer, &tStabilizationTaskControlBlock);
+  osThreadStaticDef(tStabilizationTask, func_tStabilizationTask, osPriorityLow, 0, 128, tStabilizationTaskBuffer, &tStabilizationTaskControlBlock);
   tStabilizationTaskHandle = osThreadCreate(osThread(tStabilizationTask), NULL);
 
   /* definition and creation of tDevCommTask */
@@ -219,12 +219,12 @@ void MX_FREERTOS_Init(void) {
   tDevCommTaskHandle = osThreadCreate(osThread(tDevCommTask), NULL);
 
   /* definition and creation of tSensCommTask */
-  osThreadStaticDef(tSensCommTask, func_tSensCommTask, osPriorityNormal, 0, 128, tSensCommTaskBuffer, &tSensCommTaskControlBlock);
+  osThreadStaticDef(tSensCommTask, func_tSensCommTask, osPriorityBelowNormal, 0, 128, tSensCommTaskBuffer, &tSensCommTaskControlBlock);
   tSensCommTaskHandle = osThreadCreate(osThread(tSensCommTask), NULL);
 
   /* definition and creation of tPcCommTask */
-  osThreadStaticDef(tPcCommTask, func_tPcCommTask, osPriorityHigh, 0, 128, tPcCommTaskBuffer, &tPcCommTaskControlBlock);
-  tPcCommTaskHandle = osThreadCreate(osThread(tPcCommTask), NULL);
+//  osThreadStaticDef(tPcCommTask, func_tPcCommTask, osPriorityHigh, 0, 128, tPcCommTaskBuffer, &tPcCommTaskControlBlock);
+//  tPcCommTaskHandle = osThreadCreate(osThread(tPcCommTask), NULL);
 
   /* USER CODE BEGIN RTOS_THREADS */
   HAL_UART_Receive_IT(uartBus[SHORE_UART].huart, uartBus[SHORE_UART].rxBuffer, 1);
@@ -321,7 +321,15 @@ void func_tImuCommTask(void const * argument)
 			uartBus[IMU_UART].txLength = IMU_REQUEST_LENGTH;
 	  		transmitPackage(&uartBus[IMU_UART], false);
 
-	  		rSensors.pressure_null = rSensors.pressure;
+			if(rSensors.pressure > 2000 || rSensors.pressure < -2000)
+			{
+				rSensors.pressure_null = 0;
+			}
+			else
+			{
+				rSensors.pressure_null = rSensors.pressure;
+			}
+
 	  		rSensors.startIMU = false;
 	  	}
 	  	else {
@@ -433,7 +441,7 @@ void func_tSensCommTask(void const * argument)
     	float pressure = movingAverageIterate(&pressure_filter, rSensors.pressure_raw);
     	rSensors.last_pressure = rSensors.pressure;
 		rSensors.pressure = pressure;
-		if(rSensors.last_pressure == rSensors.pressure)
+		if(rSensors.last_pressure == rSensors.pressure || rSensors.pressure > 2000 || rSensors.pressure < -2000)
 			rSensors.pressure_watchdog_counter++;
 		else
 			rSensors.pressure_watchdog_counter = 0;
@@ -441,7 +449,7 @@ void func_tSensCommTask(void const * argument)
 				(rSensors.pressure - rSensors.last_pressure)*1000/DELAY_SENSOR_TASK);
 		xSemaphoreGive(mutDataHandle);
     }
-    if(rSensors.pressure_watchdog_counter >= 250)
+    if(rSensors.pressure_watchdog_counter >= 150)
     {
     	MS5837_02BA_reinit();
     	rSensors.pressure_watchdog_counter = 0;
