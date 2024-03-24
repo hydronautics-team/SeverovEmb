@@ -1362,656 +1362,658 @@ bool MS5837_02BA_init(I2C_HandleTypeDef * hi2c){
  8001010:	af02      	add	r7, sp, #8
  8001012:	6078      	str	r0, [r7, #4]
 	MS5837_hi2c = hi2c;
- 8001014:	4a25      	ldr	r2, [pc, #148]	; (80010ac <MS5837_02BA_init+0xa0>)
+ 8001014:	4a24      	ldr	r2, [pc, #144]	; (80010a8 <MS5837_02BA_init+0x9c>)
  8001016:	687b      	ldr	r3, [r7, #4]
  8001018:	6013      	str	r3, [r2, #0]
 	HAL_I2C_Init(hi2c);
  800101a:	6878      	ldr	r0, [r7, #4]
  800101c:	f005 ff2c 	bl	8006e78 <HAL_I2C_Init>
-	if(HAL_I2C_Master_Transmit(MS5837_hi2c, DEVICE_ADDR, &RES_DEVICE_COMM, COMMAND_LENGTH, HAL_MAX_DELAY) != HAL_OK){
- 8001020:	4b22      	ldr	r3, [pc, #136]	; (80010ac <MS5837_02BA_init+0xa0>)
+	if(HAL_I2C_Master_Transmit(MS5837_hi2c, DEVICE_ADDR, &RES_DEVICE_COMM, COMMAND_LENGTH, 100) != HAL_OK){
+ 8001020:	4b21      	ldr	r3, [pc, #132]	; (80010a8 <MS5837_02BA_init+0x9c>)
  8001022:	6818      	ldr	r0, [r3, #0]
- 8001024:	f04f 33ff 	mov.w	r3, #4294967295
- 8001028:	9300      	str	r3, [sp, #0]
- 800102a:	2301      	movs	r3, #1
- 800102c:	4a20      	ldr	r2, [pc, #128]	; (80010b0 <MS5837_02BA_init+0xa4>)
- 800102e:	21ec      	movs	r1, #236	; 0xec
- 8001030:	f005 ffe0 	bl	8006ff4 <HAL_I2C_Master_Transmit>
- 8001034:	4603      	mov	r3, r0
- 8001036:	2b00      	cmp	r3, #0
- 8001038:	d001      	beq.n	800103e <MS5837_02BA_init+0x32>
+ 8001024:	2364      	movs	r3, #100	; 0x64
+ 8001026:	9300      	str	r3, [sp, #0]
+ 8001028:	2301      	movs	r3, #1
+ 800102a:	4a20      	ldr	r2, [pc, #128]	; (80010ac <MS5837_02BA_init+0xa0>)
+ 800102c:	21ec      	movs	r1, #236	; 0xec
+ 800102e:	f005 ffe1 	bl	8006ff4 <HAL_I2C_Master_Transmit>
+ 8001032:	4603      	mov	r3, r0
+ 8001034:	2b00      	cmp	r3, #0
+ 8001036:	d001      	beq.n	800103c <MS5837_02BA_init+0x30>
 		return false;
- 800103a:	2300      	movs	r3, #0
- 800103c:	e032      	b.n	80010a4 <MS5837_02BA_init+0x98>
+ 8001038:	2300      	movs	r3, #0
+ 800103a:	e030      	b.n	800109e <MS5837_02BA_init+0x92>
 	}
 	//receiving C1 - C6
 	uint8_t prom_addr = 0xA0;
- 800103e:	23a0      	movs	r3, #160	; 0xa0
- 8001040:	73bb      	strb	r3, [r7, #14]
+ 800103c:	23a0      	movs	r3, #160	; 0xa0
+ 800103e:	73bb      	strb	r3, [r7, #14]
 	for (uint8_t i = 0; i < 7; i++) {
- 8001042:	2300      	movs	r3, #0
- 8001044:	73fb      	strb	r3, [r7, #15]
- 8001046:	e029      	b.n	800109c <MS5837_02BA_init+0x90>
+ 8001040:	2300      	movs	r3, #0
+ 8001042:	73fb      	strb	r3, [r7, #15]
+ 8001044:	e027      	b.n	8001096 <MS5837_02BA_init+0x8a>
 		uint8_t prom_buff[2];
 		prom_addr += 2;
- 8001048:	7bbb      	ldrb	r3, [r7, #14]
- 800104a:	3302      	adds	r3, #2
- 800104c:	b2db      	uxtb	r3, r3
- 800104e:	73bb      	strb	r3, [r7, #14]
-		HAL_I2C_Master_Transmit(MS5837_hi2c, DEVICE_ADDR, &prom_addr, COMMAND_LENGTH, HAL_MAX_DELAY);
- 8001050:	4b16      	ldr	r3, [pc, #88]	; (80010ac <MS5837_02BA_init+0xa0>)
- 8001052:	6818      	ldr	r0, [r3, #0]
- 8001054:	f107 020e 	add.w	r2, r7, #14
- 8001058:	f04f 33ff 	mov.w	r3, #4294967295
- 800105c:	9300      	str	r3, [sp, #0]
- 800105e:	2301      	movs	r3, #1
- 8001060:	21ec      	movs	r1, #236	; 0xec
- 8001062:	f005 ffc7 	bl	8006ff4 <HAL_I2C_Master_Transmit>
-		HAL_I2C_Master_Receive(MS5837_hi2c, DEVICE_ADDR, prom_buff, PROM_LENGTH, HAL_MAX_DELAY);
- 8001066:	4b11      	ldr	r3, [pc, #68]	; (80010ac <MS5837_02BA_init+0xa0>)
- 8001068:	6818      	ldr	r0, [r3, #0]
- 800106a:	f107 020c 	add.w	r2, r7, #12
- 800106e:	f04f 33ff 	mov.w	r3, #4294967295
- 8001072:	9300      	str	r3, [sp, #0]
- 8001074:	2302      	movs	r3, #2
- 8001076:	21ec      	movs	r1, #236	; 0xec
- 8001078:	f006 f8b0 	bl	80071dc <HAL_I2C_Master_Receive>
+ 8001046:	7bbb      	ldrb	r3, [r7, #14]
+ 8001048:	3302      	adds	r3, #2
+ 800104a:	b2db      	uxtb	r3, r3
+ 800104c:	73bb      	strb	r3, [r7, #14]
+		HAL_I2C_Master_Transmit(MS5837_hi2c, DEVICE_ADDR, &prom_addr, COMMAND_LENGTH, 100);
+ 800104e:	4b16      	ldr	r3, [pc, #88]	; (80010a8 <MS5837_02BA_init+0x9c>)
+ 8001050:	6818      	ldr	r0, [r3, #0]
+ 8001052:	f107 020e 	add.w	r2, r7, #14
+ 8001056:	2364      	movs	r3, #100	; 0x64
+ 8001058:	9300      	str	r3, [sp, #0]
+ 800105a:	2301      	movs	r3, #1
+ 800105c:	21ec      	movs	r1, #236	; 0xec
+ 800105e:	f005 ffc9 	bl	8006ff4 <HAL_I2C_Master_Transmit>
+		HAL_I2C_Master_Receive(MS5837_hi2c, DEVICE_ADDR, prom_buff, PROM_LENGTH, 100);
+ 8001062:	4b11      	ldr	r3, [pc, #68]	; (80010a8 <MS5837_02BA_init+0x9c>)
+ 8001064:	6818      	ldr	r0, [r3, #0]
+ 8001066:	f107 020c 	add.w	r2, r7, #12
+ 800106a:	2364      	movs	r3, #100	; 0x64
+ 800106c:	9300      	str	r3, [sp, #0]
+ 800106e:	2302      	movs	r3, #2
+ 8001070:	21ec      	movs	r1, #236	; 0xec
+ 8001072:	f006 f8b3 	bl	80071dc <HAL_I2C_Master_Receive>
 		C[i] = (prom_buff[0] << 8) | (prom_buff[1]);
- 800107c:	7b3b      	ldrb	r3, [r7, #12]
- 800107e:	021b      	lsls	r3, r3, #8
- 8001080:	7b7a      	ldrb	r2, [r7, #13]
- 8001082:	4313      	orrs	r3, r2
- 8001084:	7bfa      	ldrb	r2, [r7, #15]
- 8001086:	17d9      	asrs	r1, r3, #31
- 8001088:	461c      	mov	r4, r3
- 800108a:	460d      	mov	r5, r1
- 800108c:	4909      	ldr	r1, [pc, #36]	; (80010b4 <MS5837_02BA_init+0xa8>)
- 800108e:	00d3      	lsls	r3, r2, #3
- 8001090:	440b      	add	r3, r1
- 8001092:	e9c3 4500 	strd	r4, r5, [r3]
+ 8001076:	7b3b      	ldrb	r3, [r7, #12]
+ 8001078:	021b      	lsls	r3, r3, #8
+ 800107a:	7b7a      	ldrb	r2, [r7, #13]
+ 800107c:	4313      	orrs	r3, r2
+ 800107e:	7bfa      	ldrb	r2, [r7, #15]
+ 8001080:	17d9      	asrs	r1, r3, #31
+ 8001082:	461c      	mov	r4, r3
+ 8001084:	460d      	mov	r5, r1
+ 8001086:	490a      	ldr	r1, [pc, #40]	; (80010b0 <MS5837_02BA_init+0xa4>)
+ 8001088:	00d3      	lsls	r3, r2, #3
+ 800108a:	440b      	add	r3, r1
+ 800108c:	e9c3 4500 	strd	r4, r5, [r3]
 	for (uint8_t i = 0; i < 7; i++) {
+ 8001090:	7bfb      	ldrb	r3, [r7, #15]
+ 8001092:	3301      	adds	r3, #1
+ 8001094:	73fb      	strb	r3, [r7, #15]
  8001096:	7bfb      	ldrb	r3, [r7, #15]
- 8001098:	3301      	adds	r3, #1
- 800109a:	73fb      	strb	r3, [r7, #15]
- 800109c:	7bfb      	ldrb	r3, [r7, #15]
- 800109e:	2b06      	cmp	r3, #6
- 80010a0:	d9d2      	bls.n	8001048 <MS5837_02BA_init+0x3c>
+ 8001098:	2b06      	cmp	r3, #6
+ 800109a:	d9d4      	bls.n	8001046 <MS5837_02BA_init+0x3a>
 	}
 	return true;
- 80010a2:	2301      	movs	r3, #1
+ 800109c:	2301      	movs	r3, #1
 }
- 80010a4:	4618      	mov	r0, r3
- 80010a6:	3710      	adds	r7, #16
- 80010a8:	46bd      	mov	sp, r7
- 80010aa:	bdb0      	pop	{r4, r5, r7, pc}
- 80010ac:	2000012c 	.word	0x2000012c
- 80010b0:	20000000 	.word	0x20000000
- 80010b4:	20000138 	.word	0x20000138
+ 800109e:	4618      	mov	r0, r3
+ 80010a0:	3710      	adds	r7, #16
+ 80010a2:	46bd      	mov	sp, r7
+ 80010a4:	bdb0      	pop	{r4, r5, r7, pc}
+ 80010a6:	bf00      	nop
+ 80010a8:	2000012c 	.word	0x2000012c
+ 80010ac:	20000000 	.word	0x20000000
+ 80010b0:	20000138 	.word	0x20000138
 
-080010b8 <MS5837_02BA_reinit>:
+080010b4 <MS5837_02BA_reinit>:
 
 bool MS5837_02BA_reinit(){
- 80010b8:	b5b0      	push	{r4, r5, r7, lr}
- 80010ba:	b084      	sub	sp, #16
- 80010bc:	af02      	add	r7, sp, #8
+ 80010b4:	b5b0      	push	{r4, r5, r7, lr}
+ 80010b6:	b084      	sub	sp, #16
+ 80010b8:	af02      	add	r7, sp, #8
 	HAL_I2C_DeInit(MS5837_hi2c);
- 80010be:	4b27      	ldr	r3, [pc, #156]	; (800115c <MS5837_02BA_reinit+0xa4>)
- 80010c0:	681b      	ldr	r3, [r3, #0]
- 80010c2:	4618      	mov	r0, r3
- 80010c4:	f005 ff67 	bl	8006f96 <HAL_I2C_DeInit>
+ 80010ba:	4b27      	ldr	r3, [pc, #156]	; (8001158 <MS5837_02BA_reinit+0xa4>)
+ 80010bc:	681b      	ldr	r3, [r3, #0]
+ 80010be:	4618      	mov	r0, r3
+ 80010c0:	f005 ff69 	bl	8006f96 <HAL_I2C_DeInit>
 	HAL_I2C_Init(MS5837_hi2c);
- 80010c8:	4b24      	ldr	r3, [pc, #144]	; (800115c <MS5837_02BA_reinit+0xa4>)
- 80010ca:	681b      	ldr	r3, [r3, #0]
- 80010cc:	4618      	mov	r0, r3
- 80010ce:	f005 fed3 	bl	8006e78 <HAL_I2C_Init>
+ 80010c4:	4b24      	ldr	r3, [pc, #144]	; (8001158 <MS5837_02BA_reinit+0xa4>)
+ 80010c6:	681b      	ldr	r3, [r3, #0]
+ 80010c8:	4618      	mov	r0, r3
+ 80010ca:	f005 fed5 	bl	8006e78 <HAL_I2C_Init>
 	MS5837_I2C_State = MS5837_I2C_NONE;
- 80010d2:	4b23      	ldr	r3, [pc, #140]	; (8001160 <MS5837_02BA_reinit+0xa8>)
- 80010d4:	2200      	movs	r2, #0
- 80010d6:	701a      	strb	r2, [r3, #0]
+ 80010ce:	4b23      	ldr	r3, [pc, #140]	; (800115c <MS5837_02BA_reinit+0xa8>)
+ 80010d0:	2200      	movs	r2, #0
+ 80010d2:	701a      	strb	r2, [r3, #0]
 	if(HAL_I2C_Master_Transmit(MS5837_hi2c, DEVICE_ADDR, &RES_DEVICE_COMM, COMMAND_LENGTH, 100) != HAL_OK){
- 80010d8:	4b20      	ldr	r3, [pc, #128]	; (800115c <MS5837_02BA_reinit+0xa4>)
- 80010da:	6818      	ldr	r0, [r3, #0]
- 80010dc:	2364      	movs	r3, #100	; 0x64
- 80010de:	9300      	str	r3, [sp, #0]
- 80010e0:	2301      	movs	r3, #1
- 80010e2:	4a20      	ldr	r2, [pc, #128]	; (8001164 <MS5837_02BA_reinit+0xac>)
- 80010e4:	21ec      	movs	r1, #236	; 0xec
- 80010e6:	f005 ff85 	bl	8006ff4 <HAL_I2C_Master_Transmit>
- 80010ea:	4603      	mov	r3, r0
- 80010ec:	2b00      	cmp	r3, #0
- 80010ee:	d001      	beq.n	80010f4 <MS5837_02BA_reinit+0x3c>
+ 80010d4:	4b20      	ldr	r3, [pc, #128]	; (8001158 <MS5837_02BA_reinit+0xa4>)
+ 80010d6:	6818      	ldr	r0, [r3, #0]
+ 80010d8:	2364      	movs	r3, #100	; 0x64
+ 80010da:	9300      	str	r3, [sp, #0]
+ 80010dc:	2301      	movs	r3, #1
+ 80010de:	4a20      	ldr	r2, [pc, #128]	; (8001160 <MS5837_02BA_reinit+0xac>)
+ 80010e0:	21ec      	movs	r1, #236	; 0xec
+ 80010e2:	f005 ff87 	bl	8006ff4 <HAL_I2C_Master_Transmit>
+ 80010e6:	4603      	mov	r3, r0
+ 80010e8:	2b00      	cmp	r3, #0
+ 80010ea:	d001      	beq.n	80010f0 <MS5837_02BA_reinit+0x3c>
 		return false;
- 80010f0:	2300      	movs	r3, #0
- 80010f2:	e02e      	b.n	8001152 <MS5837_02BA_reinit+0x9a>
+ 80010ec:	2300      	movs	r3, #0
+ 80010ee:	e02e      	b.n	800114e <MS5837_02BA_reinit+0x9a>
 	}
 	//receiving C1 - C6
 	uint8_t prom_addr = 0xA0;
- 80010f4:	23a0      	movs	r3, #160	; 0xa0
- 80010f6:	71bb      	strb	r3, [r7, #6]
+ 80010f0:	23a0      	movs	r3, #160	; 0xa0
+ 80010f2:	71bb      	strb	r3, [r7, #6]
 	for (uint8_t i = 0; i < 7; i++) {
- 80010f8:	2300      	movs	r3, #0
- 80010fa:	71fb      	strb	r3, [r7, #7]
- 80010fc:	e025      	b.n	800114a <MS5837_02BA_reinit+0x92>
+ 80010f4:	2300      	movs	r3, #0
+ 80010f6:	71fb      	strb	r3, [r7, #7]
+ 80010f8:	e025      	b.n	8001146 <MS5837_02BA_reinit+0x92>
 		uint8_t prom_buff[2];
 		prom_addr += 2;
- 80010fe:	79bb      	ldrb	r3, [r7, #6]
- 8001100:	3302      	adds	r3, #2
- 8001102:	b2db      	uxtb	r3, r3
- 8001104:	71bb      	strb	r3, [r7, #6]
+ 80010fa:	79bb      	ldrb	r3, [r7, #6]
+ 80010fc:	3302      	adds	r3, #2
+ 80010fe:	b2db      	uxtb	r3, r3
+ 8001100:	71bb      	strb	r3, [r7, #6]
 		HAL_I2C_Master_Transmit(MS5837_hi2c, DEVICE_ADDR, &prom_addr, COMMAND_LENGTH, 100);
- 8001106:	4b15      	ldr	r3, [pc, #84]	; (800115c <MS5837_02BA_reinit+0xa4>)
- 8001108:	6818      	ldr	r0, [r3, #0]
- 800110a:	1dba      	adds	r2, r7, #6
- 800110c:	2364      	movs	r3, #100	; 0x64
- 800110e:	9300      	str	r3, [sp, #0]
- 8001110:	2301      	movs	r3, #1
- 8001112:	21ec      	movs	r1, #236	; 0xec
- 8001114:	f005 ff6e 	bl	8006ff4 <HAL_I2C_Master_Transmit>
+ 8001102:	4b15      	ldr	r3, [pc, #84]	; (8001158 <MS5837_02BA_reinit+0xa4>)
+ 8001104:	6818      	ldr	r0, [r3, #0]
+ 8001106:	1dba      	adds	r2, r7, #6
+ 8001108:	2364      	movs	r3, #100	; 0x64
+ 800110a:	9300      	str	r3, [sp, #0]
+ 800110c:	2301      	movs	r3, #1
+ 800110e:	21ec      	movs	r1, #236	; 0xec
+ 8001110:	f005 ff70 	bl	8006ff4 <HAL_I2C_Master_Transmit>
 		HAL_I2C_Master_Receive(MS5837_hi2c, DEVICE_ADDR, prom_buff, PROM_LENGTH, 100);
- 8001118:	4b10      	ldr	r3, [pc, #64]	; (800115c <MS5837_02BA_reinit+0xa4>)
- 800111a:	6818      	ldr	r0, [r3, #0]
- 800111c:	1d3a      	adds	r2, r7, #4
- 800111e:	2364      	movs	r3, #100	; 0x64
- 8001120:	9300      	str	r3, [sp, #0]
- 8001122:	2302      	movs	r3, #2
- 8001124:	21ec      	movs	r1, #236	; 0xec
- 8001126:	f006 f859 	bl	80071dc <HAL_I2C_Master_Receive>
+ 8001114:	4b10      	ldr	r3, [pc, #64]	; (8001158 <MS5837_02BA_reinit+0xa4>)
+ 8001116:	6818      	ldr	r0, [r3, #0]
+ 8001118:	1d3a      	adds	r2, r7, #4
+ 800111a:	2364      	movs	r3, #100	; 0x64
+ 800111c:	9300      	str	r3, [sp, #0]
+ 800111e:	2302      	movs	r3, #2
+ 8001120:	21ec      	movs	r1, #236	; 0xec
+ 8001122:	f006 f85b 	bl	80071dc <HAL_I2C_Master_Receive>
 		C[i] = (prom_buff[0] << 8) | (prom_buff[1]);
- 800112a:	793b      	ldrb	r3, [r7, #4]
- 800112c:	021b      	lsls	r3, r3, #8
- 800112e:	797a      	ldrb	r2, [r7, #5]
- 8001130:	4313      	orrs	r3, r2
- 8001132:	79fa      	ldrb	r2, [r7, #7]
- 8001134:	17d9      	asrs	r1, r3, #31
- 8001136:	461c      	mov	r4, r3
- 8001138:	460d      	mov	r5, r1
- 800113a:	490b      	ldr	r1, [pc, #44]	; (8001168 <MS5837_02BA_reinit+0xb0>)
- 800113c:	00d3      	lsls	r3, r2, #3
- 800113e:	440b      	add	r3, r1
- 8001140:	e9c3 4500 	strd	r4, r5, [r3]
+ 8001126:	793b      	ldrb	r3, [r7, #4]
+ 8001128:	021b      	lsls	r3, r3, #8
+ 800112a:	797a      	ldrb	r2, [r7, #5]
+ 800112c:	4313      	orrs	r3, r2
+ 800112e:	79fa      	ldrb	r2, [r7, #7]
+ 8001130:	17d9      	asrs	r1, r3, #31
+ 8001132:	461c      	mov	r4, r3
+ 8001134:	460d      	mov	r5, r1
+ 8001136:	490b      	ldr	r1, [pc, #44]	; (8001164 <MS5837_02BA_reinit+0xb0>)
+ 8001138:	00d3      	lsls	r3, r2, #3
+ 800113a:	440b      	add	r3, r1
+ 800113c:	e9c3 4500 	strd	r4, r5, [r3]
 	for (uint8_t i = 0; i < 7; i++) {
- 8001144:	79fb      	ldrb	r3, [r7, #7]
- 8001146:	3301      	adds	r3, #1
- 8001148:	71fb      	strb	r3, [r7, #7]
- 800114a:	79fb      	ldrb	r3, [r7, #7]
- 800114c:	2b06      	cmp	r3, #6
- 800114e:	d9d6      	bls.n	80010fe <MS5837_02BA_reinit+0x46>
+ 8001140:	79fb      	ldrb	r3, [r7, #7]
+ 8001142:	3301      	adds	r3, #1
+ 8001144:	71fb      	strb	r3, [r7, #7]
+ 8001146:	79fb      	ldrb	r3, [r7, #7]
+ 8001148:	2b06      	cmp	r3, #6
+ 800114a:	d9d6      	bls.n	80010fa <MS5837_02BA_reinit+0x46>
 	}
 	return true;
- 8001150:	2301      	movs	r3, #1
+ 800114c:	2301      	movs	r3, #1
 }
- 8001152:	4618      	mov	r0, r3
- 8001154:	3708      	adds	r7, #8
- 8001156:	46bd      	mov	sp, r7
- 8001158:	bdb0      	pop	{r4, r5, r7, pc}
- 800115a:	bf00      	nop
- 800115c:	2000012c 	.word	0x2000012c
- 8001160:	2000018b 	.word	0x2000018b
- 8001164:	20000000 	.word	0x20000000
- 8001168:	20000138 	.word	0x20000138
+ 800114e:	4618      	mov	r0, r3
+ 8001150:	3708      	adds	r7, #8
+ 8001152:	46bd      	mov	sp, r7
+ 8001154:	bdb0      	pop	{r4, r5, r7, pc}
+ 8001156:	bf00      	nop
+ 8001158:	2000012c 	.word	0x2000012c
+ 800115c:	2000018b 	.word	0x2000018b
+ 8001160:	20000000 	.word	0x20000000
+ 8001164:	20000138 	.word	0x20000138
 
-0800116c <MS5837_02BA_get_actual_pressure>:
+08001168 <MS5837_02BA_get_actual_pressure>:
 
 int32_t MS5837_02BA_get_actual_pressure(){
- 800116c:	b580      	push	{r7, lr}
- 800116e:	b082      	sub	sp, #8
- 8001170:	af00      	add	r7, sp, #0
+ 8001168:	b580      	push	{r7, lr}
+ 800116a:	b082      	sub	sp, #8
+ 800116c:	af00      	add	r7, sp, #0
 	uint32_t current_tick = HAL_GetTick();
- 8001172:	f004 fea5 	bl	8005ec0 <HAL_GetTick>
- 8001176:	6078      	str	r0, [r7, #4]
+ 800116e:	f004 fea7 	bl	8005ec0 <HAL_GetTick>
+ 8001172:	6078      	str	r0, [r7, #4]
 	if(MS5837_I2C_NONE == MS5837_I2C_State){
- 8001178:	4b1b      	ldr	r3, [pc, #108]	; (80011e8 <MS5837_02BA_get_actual_pressure+0x7c>)
- 800117a:	781b      	ldrb	r3, [r3, #0]
- 800117c:	2b00      	cmp	r3, #0
- 800117e:	d101      	bne.n	8001184 <MS5837_02BA_get_actual_pressure+0x18>
+ 8001174:	4b1b      	ldr	r3, [pc, #108]	; (80011e4 <MS5837_02BA_get_actual_pressure+0x7c>)
+ 8001176:	781b      	ldrb	r3, [r3, #0]
+ 8001178:	2b00      	cmp	r3, #0
+ 800117a:	d101      	bne.n	8001180 <MS5837_02BA_get_actual_pressure+0x18>
 		init_new_convertion();
- 8001180:	f000 f83e 	bl	8001200 <init_new_convertion>
+ 800117c:	f000 f83e 	bl	80011fc <init_new_convertion>
 	}
 	if(MS5837_I2C_D1_CONVERTION == MS5837_I2C_State && current_tick - MS5837_conv_start_tick >= CONVERTION_TIMEOUT){
- 8001184:	4b18      	ldr	r3, [pc, #96]	; (80011e8 <MS5837_02BA_get_actual_pressure+0x7c>)
- 8001186:	781b      	ldrb	r3, [r3, #0]
- 8001188:	2b02      	cmp	r3, #2
- 800118a:	d10f      	bne.n	80011ac <MS5837_02BA_get_actual_pressure+0x40>
- 800118c:	4b17      	ldr	r3, [pc, #92]	; (80011ec <MS5837_02BA_get_actual_pressure+0x80>)
- 800118e:	681b      	ldr	r3, [r3, #0]
- 8001190:	687a      	ldr	r2, [r7, #4]
- 8001192:	1ad3      	subs	r3, r2, r3
- 8001194:	2b13      	cmp	r3, #19
- 8001196:	d909      	bls.n	80011ac <MS5837_02BA_get_actual_pressure+0x40>
+ 8001180:	4b18      	ldr	r3, [pc, #96]	; (80011e4 <MS5837_02BA_get_actual_pressure+0x7c>)
+ 8001182:	781b      	ldrb	r3, [r3, #0]
+ 8001184:	2b02      	cmp	r3, #2
+ 8001186:	d10f      	bne.n	80011a8 <MS5837_02BA_get_actual_pressure+0x40>
+ 8001188:	4b17      	ldr	r3, [pc, #92]	; (80011e8 <MS5837_02BA_get_actual_pressure+0x80>)
+ 800118a:	681b      	ldr	r3, [r3, #0]
+ 800118c:	687a      	ldr	r2, [r7, #4]
+ 800118e:	1ad3      	subs	r3, r2, r3
+ 8001190:	2b13      	cmp	r3, #19
+ 8001192:	d909      	bls.n	80011a8 <MS5837_02BA_get_actual_pressure+0x40>
 		MS5837_I2C_State = MS5837_I2C_D1_TX_ADC_COM;
- 8001198:	4b13      	ldr	r3, [pc, #76]	; (80011e8 <MS5837_02BA_get_actual_pressure+0x7c>)
- 800119a:	2203      	movs	r2, #3
- 800119c:	701a      	strb	r2, [r3, #0]
+ 8001194:	4b13      	ldr	r3, [pc, #76]	; (80011e4 <MS5837_02BA_get_actual_pressure+0x7c>)
+ 8001196:	2203      	movs	r2, #3
+ 8001198:	701a      	strb	r2, [r3, #0]
 		HAL_I2C_Master_Transmit_IT(MS5837_hi2c, DEVICE_ADDR, &ADC_READ_COMM, COMMAND_LENGTH);
- 800119e:	4b14      	ldr	r3, [pc, #80]	; (80011f0 <MS5837_02BA_get_actual_pressure+0x84>)
- 80011a0:	6818      	ldr	r0, [r3, #0]
- 80011a2:	2301      	movs	r3, #1
- 80011a4:	4a13      	ldr	r2, [pc, #76]	; (80011f4 <MS5837_02BA_get_actual_pressure+0x88>)
- 80011a6:	21ec      	movs	r1, #236	; 0xec
- 80011a8:	f006 f90e 	bl	80073c8 <HAL_I2C_Master_Transmit_IT>
+ 800119a:	4b14      	ldr	r3, [pc, #80]	; (80011ec <MS5837_02BA_get_actual_pressure+0x84>)
+ 800119c:	6818      	ldr	r0, [r3, #0]
+ 800119e:	2301      	movs	r3, #1
+ 80011a0:	4a13      	ldr	r2, [pc, #76]	; (80011f0 <MS5837_02BA_get_actual_pressure+0x88>)
+ 80011a2:	21ec      	movs	r1, #236	; 0xec
+ 80011a4:	f006 f910 	bl	80073c8 <HAL_I2C_Master_Transmit_IT>
 	}
 	if(MS5837_I2C_D2_CONVERTION == MS5837_I2C_State && current_tick - MS5837_conv_start_tick >= CONVERTION_TIMEOUT){
- 80011ac:	4b0e      	ldr	r3, [pc, #56]	; (80011e8 <MS5837_02BA_get_actual_pressure+0x7c>)
- 80011ae:	781b      	ldrb	r3, [r3, #0]
- 80011b0:	2b06      	cmp	r3, #6
- 80011b2:	d10f      	bne.n	80011d4 <MS5837_02BA_get_actual_pressure+0x68>
- 80011b4:	4b0d      	ldr	r3, [pc, #52]	; (80011ec <MS5837_02BA_get_actual_pressure+0x80>)
- 80011b6:	681b      	ldr	r3, [r3, #0]
- 80011b8:	687a      	ldr	r2, [r7, #4]
- 80011ba:	1ad3      	subs	r3, r2, r3
- 80011bc:	2b13      	cmp	r3, #19
- 80011be:	d909      	bls.n	80011d4 <MS5837_02BA_get_actual_pressure+0x68>
+ 80011a8:	4b0e      	ldr	r3, [pc, #56]	; (80011e4 <MS5837_02BA_get_actual_pressure+0x7c>)
+ 80011aa:	781b      	ldrb	r3, [r3, #0]
+ 80011ac:	2b06      	cmp	r3, #6
+ 80011ae:	d10f      	bne.n	80011d0 <MS5837_02BA_get_actual_pressure+0x68>
+ 80011b0:	4b0d      	ldr	r3, [pc, #52]	; (80011e8 <MS5837_02BA_get_actual_pressure+0x80>)
+ 80011b2:	681b      	ldr	r3, [r3, #0]
+ 80011b4:	687a      	ldr	r2, [r7, #4]
+ 80011b6:	1ad3      	subs	r3, r2, r3
+ 80011b8:	2b13      	cmp	r3, #19
+ 80011ba:	d909      	bls.n	80011d0 <MS5837_02BA_get_actual_pressure+0x68>
 		MS5837_I2C_State = MS5837_I2C_D2_TX_ADC_COM;
- 80011c0:	4b09      	ldr	r3, [pc, #36]	; (80011e8 <MS5837_02BA_get_actual_pressure+0x7c>)
- 80011c2:	2207      	movs	r2, #7
- 80011c4:	701a      	strb	r2, [r3, #0]
+ 80011bc:	4b09      	ldr	r3, [pc, #36]	; (80011e4 <MS5837_02BA_get_actual_pressure+0x7c>)
+ 80011be:	2207      	movs	r2, #7
+ 80011c0:	701a      	strb	r2, [r3, #0]
 		HAL_I2C_Master_Transmit_IT(MS5837_hi2c, DEVICE_ADDR, &ADC_READ_COMM, COMMAND_LENGTH);
- 80011c6:	4b0a      	ldr	r3, [pc, #40]	; (80011f0 <MS5837_02BA_get_actual_pressure+0x84>)
- 80011c8:	6818      	ldr	r0, [r3, #0]
- 80011ca:	2301      	movs	r3, #1
- 80011cc:	4a09      	ldr	r2, [pc, #36]	; (80011f4 <MS5837_02BA_get_actual_pressure+0x88>)
- 80011ce:	21ec      	movs	r1, #236	; 0xec
- 80011d0:	f006 f8fa 	bl	80073c8 <HAL_I2C_Master_Transmit_IT>
+ 80011c2:	4b0a      	ldr	r3, [pc, #40]	; (80011ec <MS5837_02BA_get_actual_pressure+0x84>)
+ 80011c4:	6818      	ldr	r0, [r3, #0]
+ 80011c6:	2301      	movs	r3, #1
+ 80011c8:	4a09      	ldr	r2, [pc, #36]	; (80011f0 <MS5837_02BA_get_actual_pressure+0x88>)
+ 80011ca:	21ec      	movs	r1, #236	; 0xec
+ 80011cc:	f006 f8fc 	bl	80073c8 <HAL_I2C_Master_Transmit_IT>
 	}
 //	HAL_I2C_StateTypeDef i2c_state = HAL_I2C_GetState(MS5837_hi2c);
 	return presure-initial_pressure;
- 80011d4:	4b08      	ldr	r3, [pc, #32]	; (80011f8 <MS5837_02BA_get_actual_pressure+0x8c>)
- 80011d6:	681a      	ldr	r2, [r3, #0]
- 80011d8:	4b08      	ldr	r3, [pc, #32]	; (80011fc <MS5837_02BA_get_actual_pressure+0x90>)
- 80011da:	681b      	ldr	r3, [r3, #0]
- 80011dc:	1ad3      	subs	r3, r2, r3
+ 80011d0:	4b08      	ldr	r3, [pc, #32]	; (80011f4 <MS5837_02BA_get_actual_pressure+0x8c>)
+ 80011d2:	681a      	ldr	r2, [r3, #0]
+ 80011d4:	4b08      	ldr	r3, [pc, #32]	; (80011f8 <MS5837_02BA_get_actual_pressure+0x90>)
+ 80011d6:	681b      	ldr	r3, [r3, #0]
+ 80011d8:	1ad3      	subs	r3, r2, r3
 }
- 80011de:	4618      	mov	r0, r3
- 80011e0:	3708      	adds	r7, #8
- 80011e2:	46bd      	mov	sp, r7
- 80011e4:	bd80      	pop	{r7, pc}
- 80011e6:	bf00      	nop
- 80011e8:	2000018b 	.word	0x2000018b
- 80011ec:	20000004 	.word	0x20000004
- 80011f0:	2000012c 	.word	0x2000012c
- 80011f4:	20000130 	.word	0x20000130
- 80011f8:	20000180 	.word	0x20000180
- 80011fc:	20000184 	.word	0x20000184
+ 80011da:	4618      	mov	r0, r3
+ 80011dc:	3708      	adds	r7, #8
+ 80011de:	46bd      	mov	sp, r7
+ 80011e0:	bd80      	pop	{r7, pc}
+ 80011e2:	bf00      	nop
+ 80011e4:	2000018b 	.word	0x2000018b
+ 80011e8:	20000004 	.word	0x20000004
+ 80011ec:	2000012c 	.word	0x2000012c
+ 80011f0:	20000130 	.word	0x20000130
+ 80011f4:	20000180 	.word	0x20000180
+ 80011f8:	20000184 	.word	0x20000184
 
-08001200 <init_new_convertion>:
+080011fc <init_new_convertion>:
 
 void init_new_convertion(){
- 8001200:	b580      	push	{r7, lr}
- 8001202:	af00      	add	r7, sp, #0
+ 80011fc:	b580      	push	{r7, lr}
+ 80011fe:	af00      	add	r7, sp, #0
 	MS5837_I2C_State = MS5837_I2C_D1_TX_CONV_COM;
- 8001204:	4b05      	ldr	r3, [pc, #20]	; (800121c <init_new_convertion+0x1c>)
- 8001206:	2201      	movs	r2, #1
- 8001208:	701a      	strb	r2, [r3, #0]
+ 8001200:	4b05      	ldr	r3, [pc, #20]	; (8001218 <init_new_convertion+0x1c>)
+ 8001202:	2201      	movs	r2, #1
+ 8001204:	701a      	strb	r2, [r3, #0]
 	HAL_I2C_Master_Transmit_IT(MS5837_hi2c, DEVICE_ADDR, &CONVERT_D1_COMM, COMMAND_LENGTH);
- 800120a:	4b05      	ldr	r3, [pc, #20]	; (8001220 <init_new_convertion+0x20>)
- 800120c:	6818      	ldr	r0, [r3, #0]
- 800120e:	2301      	movs	r3, #1
- 8001210:	4a04      	ldr	r2, [pc, #16]	; (8001224 <init_new_convertion+0x24>)
- 8001212:	21ec      	movs	r1, #236	; 0xec
- 8001214:	f006 f8d8 	bl	80073c8 <HAL_I2C_Master_Transmit_IT>
+ 8001206:	4b05      	ldr	r3, [pc, #20]	; (800121c <init_new_convertion+0x20>)
+ 8001208:	6818      	ldr	r0, [r3, #0]
+ 800120a:	2301      	movs	r3, #1
+ 800120c:	4a04      	ldr	r2, [pc, #16]	; (8001220 <init_new_convertion+0x24>)
+ 800120e:	21ec      	movs	r1, #236	; 0xec
+ 8001210:	f006 f8da 	bl	80073c8 <HAL_I2C_Master_Transmit_IT>
 //	MS5837_conv_start_tick = HAL_GetTick();
 }
- 8001218:	bf00      	nop
- 800121a:	bd80      	pop	{r7, pc}
- 800121c:	2000018b 	.word	0x2000018b
- 8001220:	2000012c 	.word	0x2000012c
- 8001224:	20000001 	.word	0x20000001
+ 8001214:	bf00      	nop
+ 8001216:	bd80      	pop	{r7, pc}
+ 8001218:	2000018b 	.word	0x2000018b
+ 800121c:	2000012c 	.word	0x2000012c
+ 8001220:	20000001 	.word	0x20000001
 
-08001228 <MS5837_I2C_MasterRxCplt>:
+08001224 <MS5837_I2C_MasterRxCplt>:
 
 void MS5837_I2C_MasterRxCplt (I2C_HandleTypeDef * hi2c){
- 8001228:	b5b0      	push	{r4, r5, r7, lr}
- 800122a:	b082      	sub	sp, #8
- 800122c:	af00      	add	r7, sp, #0
- 800122e:	6078      	str	r0, [r7, #4]
+ 8001224:	b5b0      	push	{r4, r5, r7, lr}
+ 8001226:	b082      	sub	sp, #8
+ 8001228:	af00      	add	r7, sp, #0
+ 800122a:	6078      	str	r0, [r7, #4]
 	if(hi2c == MS5837_hi2c){
- 8001230:	491f      	ldr	r1, [pc, #124]	; (80012b0 <MS5837_I2C_MasterRxCplt+0x88>)
- 8001232:	6809      	ldr	r1, [r1, #0]
- 8001234:	6878      	ldr	r0, [r7, #4]
- 8001236:	4288      	cmp	r0, r1
- 8001238:	d135      	bne.n	80012a6 <MS5837_I2C_MasterRxCplt+0x7e>
+ 800122c:	491f      	ldr	r1, [pc, #124]	; (80012ac <MS5837_I2C_MasterRxCplt+0x88>)
+ 800122e:	6809      	ldr	r1, [r1, #0]
+ 8001230:	6878      	ldr	r0, [r7, #4]
+ 8001232:	4288      	cmp	r0, r1
+ 8001234:	d135      	bne.n	80012a2 <MS5837_I2C_MasterRxCplt+0x7e>
 		if(MS5837_I2C_D1_RX_ADC == MS5837_I2C_State){
- 800123a:	491e      	ldr	r1, [pc, #120]	; (80012b4 <MS5837_I2C_MasterRxCplt+0x8c>)
- 800123c:	7809      	ldrb	r1, [r1, #0]
- 800123e:	2904      	cmp	r1, #4
- 8001240:	d119      	bne.n	8001276 <MS5837_I2C_MasterRxCplt+0x4e>
+ 8001236:	491e      	ldr	r1, [pc, #120]	; (80012b0 <MS5837_I2C_MasterRxCplt+0x8c>)
+ 8001238:	7809      	ldrb	r1, [r1, #0]
+ 800123a:	2904      	cmp	r1, #4
+ 800123c:	d119      	bne.n	8001272 <MS5837_I2C_MasterRxCplt+0x4e>
 			D1 = (adc_buff[0] << 16) | (adc_buff[1] << 8) | (adc_buff[2]);
- 8001242:	491d      	ldr	r1, [pc, #116]	; (80012b8 <MS5837_I2C_MasterRxCplt+0x90>)
- 8001244:	7809      	ldrb	r1, [r1, #0]
- 8001246:	0408      	lsls	r0, r1, #16
- 8001248:	491b      	ldr	r1, [pc, #108]	; (80012b8 <MS5837_I2C_MasterRxCplt+0x90>)
- 800124a:	7849      	ldrb	r1, [r1, #1]
- 800124c:	0209      	lsls	r1, r1, #8
- 800124e:	4301      	orrs	r1, r0
- 8001250:	4819      	ldr	r0, [pc, #100]	; (80012b8 <MS5837_I2C_MasterRxCplt+0x90>)
- 8001252:	7880      	ldrb	r0, [r0, #2]
- 8001254:	4301      	orrs	r1, r0
- 8001256:	17c8      	asrs	r0, r1, #31
- 8001258:	460a      	mov	r2, r1
- 800125a:	4603      	mov	r3, r0
- 800125c:	4917      	ldr	r1, [pc, #92]	; (80012bc <MS5837_I2C_MasterRxCplt+0x94>)
- 800125e:	e9c1 2300 	strd	r2, r3, [r1]
+ 800123e:	491d      	ldr	r1, [pc, #116]	; (80012b4 <MS5837_I2C_MasterRxCplt+0x90>)
+ 8001240:	7809      	ldrb	r1, [r1, #0]
+ 8001242:	0408      	lsls	r0, r1, #16
+ 8001244:	491b      	ldr	r1, [pc, #108]	; (80012b4 <MS5837_I2C_MasterRxCplt+0x90>)
+ 8001246:	7849      	ldrb	r1, [r1, #1]
+ 8001248:	0209      	lsls	r1, r1, #8
+ 800124a:	4301      	orrs	r1, r0
+ 800124c:	4819      	ldr	r0, [pc, #100]	; (80012b4 <MS5837_I2C_MasterRxCplt+0x90>)
+ 800124e:	7880      	ldrb	r0, [r0, #2]
+ 8001250:	4301      	orrs	r1, r0
+ 8001252:	17c8      	asrs	r0, r1, #31
+ 8001254:	460a      	mov	r2, r1
+ 8001256:	4603      	mov	r3, r0
+ 8001258:	4917      	ldr	r1, [pc, #92]	; (80012b8 <MS5837_I2C_MasterRxCplt+0x94>)
+ 800125a:	e9c1 2300 	strd	r2, r3, [r1]
 			MS5837_I2C_State = MS5837_I2C_D2_TX_CONV_COM;
- 8001262:	4b14      	ldr	r3, [pc, #80]	; (80012b4 <MS5837_I2C_MasterRxCplt+0x8c>)
- 8001264:	2205      	movs	r2, #5
- 8001266:	701a      	strb	r2, [r3, #0]
+ 800125e:	4b14      	ldr	r3, [pc, #80]	; (80012b0 <MS5837_I2C_MasterRxCplt+0x8c>)
+ 8001260:	2205      	movs	r2, #5
+ 8001262:	701a      	strb	r2, [r3, #0]
 			HAL_I2C_Master_Transmit_IT(MS5837_hi2c, DEVICE_ADDR, &CONVERT_D2_COMM, COMMAND_LENGTH);
- 8001268:	4b11      	ldr	r3, [pc, #68]	; (80012b0 <MS5837_I2C_MasterRxCplt+0x88>)
- 800126a:	6818      	ldr	r0, [r3, #0]
- 800126c:	2301      	movs	r3, #1
- 800126e:	4a14      	ldr	r2, [pc, #80]	; (80012c0 <MS5837_I2C_MasterRxCplt+0x98>)
- 8001270:	21ec      	movs	r1, #236	; 0xec
- 8001272:	f006 f8a9 	bl	80073c8 <HAL_I2C_Master_Transmit_IT>
+ 8001264:	4b11      	ldr	r3, [pc, #68]	; (80012ac <MS5837_I2C_MasterRxCplt+0x88>)
+ 8001266:	6818      	ldr	r0, [r3, #0]
+ 8001268:	2301      	movs	r3, #1
+ 800126a:	4a14      	ldr	r2, [pc, #80]	; (80012bc <MS5837_I2C_MasterRxCplt+0x98>)
+ 800126c:	21ec      	movs	r1, #236	; 0xec
+ 800126e:	f006 f8ab 	bl	80073c8 <HAL_I2C_Master_Transmit_IT>
 		}
 		if(MS5837_I2C_D2_RX_ADC == MS5837_I2C_State){
- 8001276:	4b0f      	ldr	r3, [pc, #60]	; (80012b4 <MS5837_I2C_MasterRxCplt+0x8c>)
- 8001278:	781b      	ldrb	r3, [r3, #0]
- 800127a:	2b08      	cmp	r3, #8
- 800127c:	d113      	bne.n	80012a6 <MS5837_I2C_MasterRxCplt+0x7e>
+ 8001272:	4b0f      	ldr	r3, [pc, #60]	; (80012b0 <MS5837_I2C_MasterRxCplt+0x8c>)
+ 8001274:	781b      	ldrb	r3, [r3, #0]
+ 8001276:	2b08      	cmp	r3, #8
+ 8001278:	d113      	bne.n	80012a2 <MS5837_I2C_MasterRxCplt+0x7e>
 			D2 = (adc_buff[0] << 16) | (adc_buff[1] << 8) | (adc_buff[2]);
- 800127e:	4b0e      	ldr	r3, [pc, #56]	; (80012b8 <MS5837_I2C_MasterRxCplt+0x90>)
- 8001280:	781b      	ldrb	r3, [r3, #0]
- 8001282:	041a      	lsls	r2, r3, #16
- 8001284:	4b0c      	ldr	r3, [pc, #48]	; (80012b8 <MS5837_I2C_MasterRxCplt+0x90>)
- 8001286:	785b      	ldrb	r3, [r3, #1]
- 8001288:	021b      	lsls	r3, r3, #8
- 800128a:	4313      	orrs	r3, r2
- 800128c:	4a0a      	ldr	r2, [pc, #40]	; (80012b8 <MS5837_I2C_MasterRxCplt+0x90>)
- 800128e:	7892      	ldrb	r2, [r2, #2]
- 8001290:	4313      	orrs	r3, r2
- 8001292:	17da      	asrs	r2, r3, #31
- 8001294:	461c      	mov	r4, r3
- 8001296:	4615      	mov	r5, r2
- 8001298:	4b0a      	ldr	r3, [pc, #40]	; (80012c4 <MS5837_I2C_MasterRxCplt+0x9c>)
- 800129a:	e9c3 4500 	strd	r4, r5, [r3]
+ 800127a:	4b0e      	ldr	r3, [pc, #56]	; (80012b4 <MS5837_I2C_MasterRxCplt+0x90>)
+ 800127c:	781b      	ldrb	r3, [r3, #0]
+ 800127e:	041a      	lsls	r2, r3, #16
+ 8001280:	4b0c      	ldr	r3, [pc, #48]	; (80012b4 <MS5837_I2C_MasterRxCplt+0x90>)
+ 8001282:	785b      	ldrb	r3, [r3, #1]
+ 8001284:	021b      	lsls	r3, r3, #8
+ 8001286:	4313      	orrs	r3, r2
+ 8001288:	4a0a      	ldr	r2, [pc, #40]	; (80012b4 <MS5837_I2C_MasterRxCplt+0x90>)
+ 800128a:	7892      	ldrb	r2, [r2, #2]
+ 800128c:	4313      	orrs	r3, r2
+ 800128e:	17da      	asrs	r2, r3, #31
+ 8001290:	461c      	mov	r4, r3
+ 8001292:	4615      	mov	r5, r2
+ 8001294:	4b0a      	ldr	r3, [pc, #40]	; (80012c0 <MS5837_I2C_MasterRxCplt+0x9c>)
+ 8001296:	e9c3 4500 	strd	r4, r5, [r3]
 			init_new_convertion();
- 800129e:	f7ff ffaf 	bl	8001200 <init_new_convertion>
+ 800129a:	f7ff ffaf 	bl	80011fc <init_new_convertion>
 			calculate();
- 80012a2:	f000 f909 	bl	80014b8 <calculate>
+ 800129e:	f000 f90b 	bl	80014b8 <calculate>
 		}
 //		MS5837_conv_start_tick = HAL_GetTick();
 	}
 }
- 80012a6:	bf00      	nop
- 80012a8:	3708      	adds	r7, #8
- 80012aa:	46bd      	mov	sp, r7
- 80012ac:	bdb0      	pop	{r4, r5, r7, pc}
- 80012ae:	bf00      	nop
- 80012b0:	2000012c 	.word	0x2000012c
- 80012b4:	2000018b 	.word	0x2000018b
- 80012b8:	20000188 	.word	0x20000188
- 80012bc:	20000170 	.word	0x20000170
- 80012c0:	20000002 	.word	0x20000002
- 80012c4:	20000178 	.word	0x20000178
+ 80012a2:	bf00      	nop
+ 80012a4:	3708      	adds	r7, #8
+ 80012a6:	46bd      	mov	sp, r7
+ 80012a8:	bdb0      	pop	{r4, r5, r7, pc}
+ 80012aa:	bf00      	nop
+ 80012ac:	2000012c 	.word	0x2000012c
+ 80012b0:	2000018b 	.word	0x2000018b
+ 80012b4:	20000188 	.word	0x20000188
+ 80012b8:	20000170 	.word	0x20000170
+ 80012bc:	20000002 	.word	0x20000002
+ 80012c0:	20000178 	.word	0x20000178
 
-080012c8 <MS5837_I2C_MasterTxCplt>:
+080012c4 <MS5837_I2C_MasterTxCplt>:
 
 void MS5837_I2C_MasterTxCplt (I2C_HandleTypeDef * hi2c){
- 80012c8:	b580      	push	{r7, lr}
- 80012ca:	b082      	sub	sp, #8
- 80012cc:	af00      	add	r7, sp, #0
- 80012ce:	6078      	str	r0, [r7, #4]
+ 80012c4:	b580      	push	{r7, lr}
+ 80012c6:	b082      	sub	sp, #8
+ 80012c8:	af00      	add	r7, sp, #0
+ 80012ca:	6078      	str	r0, [r7, #4]
 	if(hi2c == MS5837_hi2c){
- 80012d0:	4b1e      	ldr	r3, [pc, #120]	; (800134c <MS5837_I2C_MasterTxCplt+0x84>)
- 80012d2:	681b      	ldr	r3, [r3, #0]
- 80012d4:	687a      	ldr	r2, [r7, #4]
- 80012d6:	429a      	cmp	r2, r3
- 80012d8:	d133      	bne.n	8001342 <MS5837_I2C_MasterTxCplt+0x7a>
+ 80012cc:	4b1e      	ldr	r3, [pc, #120]	; (8001348 <MS5837_I2C_MasterTxCplt+0x84>)
+ 80012ce:	681b      	ldr	r3, [r3, #0]
+ 80012d0:	687a      	ldr	r2, [r7, #4]
+ 80012d2:	429a      	cmp	r2, r3
+ 80012d4:	d133      	bne.n	800133e <MS5837_I2C_MasterTxCplt+0x7a>
 		if(MS5837_I2C_D1_TX_CONV_COM == MS5837_I2C_State){
- 80012da:	4b1d      	ldr	r3, [pc, #116]	; (8001350 <MS5837_I2C_MasterTxCplt+0x88>)
- 80012dc:	781b      	ldrb	r3, [r3, #0]
- 80012de:	2b01      	cmp	r3, #1
- 80012e0:	d107      	bne.n	80012f2 <MS5837_I2C_MasterTxCplt+0x2a>
+ 80012d6:	4b1d      	ldr	r3, [pc, #116]	; (800134c <MS5837_I2C_MasterTxCplt+0x88>)
+ 80012d8:	781b      	ldrb	r3, [r3, #0]
+ 80012da:	2b01      	cmp	r3, #1
+ 80012dc:	d107      	bne.n	80012ee <MS5837_I2C_MasterTxCplt+0x2a>
 			MS5837_I2C_State = MS5837_I2C_D1_CONVERTION;
- 80012e2:	4b1b      	ldr	r3, [pc, #108]	; (8001350 <MS5837_I2C_MasterTxCplt+0x88>)
- 80012e4:	2202      	movs	r2, #2
- 80012e6:	701a      	strb	r2, [r3, #0]
+ 80012de:	4b1b      	ldr	r3, [pc, #108]	; (800134c <MS5837_I2C_MasterTxCplt+0x88>)
+ 80012e0:	2202      	movs	r2, #2
+ 80012e2:	701a      	strb	r2, [r3, #0]
 			MS5837_conv_start_tick = HAL_GetTick();
- 80012e8:	f004 fdea 	bl	8005ec0 <HAL_GetTick>
- 80012ec:	4603      	mov	r3, r0
- 80012ee:	4a19      	ldr	r2, [pc, #100]	; (8001354 <MS5837_I2C_MasterTxCplt+0x8c>)
- 80012f0:	6013      	str	r3, [r2, #0]
+ 80012e4:	f004 fdec 	bl	8005ec0 <HAL_GetTick>
+ 80012e8:	4603      	mov	r3, r0
+ 80012ea:	4a19      	ldr	r2, [pc, #100]	; (8001350 <MS5837_I2C_MasterTxCplt+0x8c>)
+ 80012ec:	6013      	str	r3, [r2, #0]
 		}
 		if(MS5837_I2C_D1_TX_ADC_COM == MS5837_I2C_State){
- 80012f2:	4b17      	ldr	r3, [pc, #92]	; (8001350 <MS5837_I2C_MasterTxCplt+0x88>)
- 80012f4:	781b      	ldrb	r3, [r3, #0]
- 80012f6:	2b03      	cmp	r3, #3
- 80012f8:	d109      	bne.n	800130e <MS5837_I2C_MasterTxCplt+0x46>
+ 80012ee:	4b17      	ldr	r3, [pc, #92]	; (800134c <MS5837_I2C_MasterTxCplt+0x88>)
+ 80012f0:	781b      	ldrb	r3, [r3, #0]
+ 80012f2:	2b03      	cmp	r3, #3
+ 80012f4:	d109      	bne.n	800130a <MS5837_I2C_MasterTxCplt+0x46>
 			MS5837_I2C_State = MS5837_I2C_D1_RX_ADC;
- 80012fa:	4b15      	ldr	r3, [pc, #84]	; (8001350 <MS5837_I2C_MasterTxCplt+0x88>)
- 80012fc:	2204      	movs	r2, #4
- 80012fe:	701a      	strb	r2, [r3, #0]
+ 80012f6:	4b15      	ldr	r3, [pc, #84]	; (800134c <MS5837_I2C_MasterTxCplt+0x88>)
+ 80012f8:	2204      	movs	r2, #4
+ 80012fa:	701a      	strb	r2, [r3, #0]
 			HAL_I2C_Master_Receive_IT(MS5837_hi2c, DEVICE_ADDR, adc_buff, ADC_LENGTH);
- 8001300:	4b12      	ldr	r3, [pc, #72]	; (800134c <MS5837_I2C_MasterTxCplt+0x84>)
- 8001302:	6818      	ldr	r0, [r3, #0]
- 8001304:	2303      	movs	r3, #3
- 8001306:	4a14      	ldr	r2, [pc, #80]	; (8001358 <MS5837_I2C_MasterTxCplt+0x90>)
- 8001308:	21ec      	movs	r1, #236	; 0xec
- 800130a:	f006 f8cd 	bl	80074a8 <HAL_I2C_Master_Receive_IT>
+ 80012fc:	4b12      	ldr	r3, [pc, #72]	; (8001348 <MS5837_I2C_MasterTxCplt+0x84>)
+ 80012fe:	6818      	ldr	r0, [r3, #0]
+ 8001300:	2303      	movs	r3, #3
+ 8001302:	4a14      	ldr	r2, [pc, #80]	; (8001354 <MS5837_I2C_MasterTxCplt+0x90>)
+ 8001304:	21ec      	movs	r1, #236	; 0xec
+ 8001306:	f006 f8cf 	bl	80074a8 <HAL_I2C_Master_Receive_IT>
 		}
 		if(MS5837_I2C_D2_TX_CONV_COM == MS5837_I2C_State){
- 800130e:	4b10      	ldr	r3, [pc, #64]	; (8001350 <MS5837_I2C_MasterTxCplt+0x88>)
- 8001310:	781b      	ldrb	r3, [r3, #0]
- 8001312:	2b05      	cmp	r3, #5
- 8001314:	d107      	bne.n	8001326 <MS5837_I2C_MasterTxCplt+0x5e>
+ 800130a:	4b10      	ldr	r3, [pc, #64]	; (800134c <MS5837_I2C_MasterTxCplt+0x88>)
+ 800130c:	781b      	ldrb	r3, [r3, #0]
+ 800130e:	2b05      	cmp	r3, #5
+ 8001310:	d107      	bne.n	8001322 <MS5837_I2C_MasterTxCplt+0x5e>
 			MS5837_I2C_State = MS5837_I2C_D2_CONVERTION;
- 8001316:	4b0e      	ldr	r3, [pc, #56]	; (8001350 <MS5837_I2C_MasterTxCplt+0x88>)
- 8001318:	2206      	movs	r2, #6
- 800131a:	701a      	strb	r2, [r3, #0]
+ 8001312:	4b0e      	ldr	r3, [pc, #56]	; (800134c <MS5837_I2C_MasterTxCplt+0x88>)
+ 8001314:	2206      	movs	r2, #6
+ 8001316:	701a      	strb	r2, [r3, #0]
 			MS5837_conv_start_tick = HAL_GetTick();
- 800131c:	f004 fdd0 	bl	8005ec0 <HAL_GetTick>
- 8001320:	4603      	mov	r3, r0
- 8001322:	4a0c      	ldr	r2, [pc, #48]	; (8001354 <MS5837_I2C_MasterTxCplt+0x8c>)
- 8001324:	6013      	str	r3, [r2, #0]
+ 8001318:	f004 fdd2 	bl	8005ec0 <HAL_GetTick>
+ 800131c:	4603      	mov	r3, r0
+ 800131e:	4a0c      	ldr	r2, [pc, #48]	; (8001350 <MS5837_I2C_MasterTxCplt+0x8c>)
+ 8001320:	6013      	str	r3, [r2, #0]
 		}
 		if(MS5837_I2C_D2_TX_ADC_COM == MS5837_I2C_State){
- 8001326:	4b0a      	ldr	r3, [pc, #40]	; (8001350 <MS5837_I2C_MasterTxCplt+0x88>)
- 8001328:	781b      	ldrb	r3, [r3, #0]
- 800132a:	2b07      	cmp	r3, #7
- 800132c:	d109      	bne.n	8001342 <MS5837_I2C_MasterTxCplt+0x7a>
+ 8001322:	4b0a      	ldr	r3, [pc, #40]	; (800134c <MS5837_I2C_MasterTxCplt+0x88>)
+ 8001324:	781b      	ldrb	r3, [r3, #0]
+ 8001326:	2b07      	cmp	r3, #7
+ 8001328:	d109      	bne.n	800133e <MS5837_I2C_MasterTxCplt+0x7a>
 			MS5837_I2C_State = MS5837_I2C_D2_RX_ADC;
- 800132e:	4b08      	ldr	r3, [pc, #32]	; (8001350 <MS5837_I2C_MasterTxCplt+0x88>)
- 8001330:	2208      	movs	r2, #8
- 8001332:	701a      	strb	r2, [r3, #0]
+ 800132a:	4b08      	ldr	r3, [pc, #32]	; (800134c <MS5837_I2C_MasterTxCplt+0x88>)
+ 800132c:	2208      	movs	r2, #8
+ 800132e:	701a      	strb	r2, [r3, #0]
 			HAL_I2C_Master_Receive_IT(MS5837_hi2c, DEVICE_ADDR, adc_buff, ADC_LENGTH);
- 8001334:	4b05      	ldr	r3, [pc, #20]	; (800134c <MS5837_I2C_MasterTxCplt+0x84>)
- 8001336:	6818      	ldr	r0, [r3, #0]
- 8001338:	2303      	movs	r3, #3
- 800133a:	4a07      	ldr	r2, [pc, #28]	; (8001358 <MS5837_I2C_MasterTxCplt+0x90>)
- 800133c:	21ec      	movs	r1, #236	; 0xec
- 800133e:	f006 f8b3 	bl	80074a8 <HAL_I2C_Master_Receive_IT>
+ 8001330:	4b05      	ldr	r3, [pc, #20]	; (8001348 <MS5837_I2C_MasterTxCplt+0x84>)
+ 8001332:	6818      	ldr	r0, [r3, #0]
+ 8001334:	2303      	movs	r3, #3
+ 8001336:	4a07      	ldr	r2, [pc, #28]	; (8001354 <MS5837_I2C_MasterTxCplt+0x90>)
+ 8001338:	21ec      	movs	r1, #236	; 0xec
+ 800133a:	f006 f8b5 	bl	80074a8 <HAL_I2C_Master_Receive_IT>
 		}
 	}
 }
- 8001342:	bf00      	nop
- 8001344:	3708      	adds	r7, #8
- 8001346:	46bd      	mov	sp, r7
- 8001348:	bd80      	pop	{r7, pc}
- 800134a:	bf00      	nop
- 800134c:	2000012c 	.word	0x2000012c
- 8001350:	2000018b 	.word	0x2000018b
- 8001354:	20000004 	.word	0x20000004
- 8001358:	20000188 	.word	0x20000188
+ 800133e:	bf00      	nop
+ 8001340:	3708      	adds	r7, #8
+ 8001342:	46bd      	mov	sp, r7
+ 8001344:	bd80      	pop	{r7, pc}
+ 8001346:	bf00      	nop
+ 8001348:	2000012c 	.word	0x2000012c
+ 800134c:	2000018b 	.word	0x2000018b
+ 8001350:	20000004 	.word	0x20000004
+ 8001354:	20000188 	.word	0x20000188
 
-0800135c <MS5837_02BA_check_pressure>:
+08001358 <MS5837_02BA_check_pressure>:
 
 void MS5837_I2C_MasterError (I2C_HandleTypeDef * hi2c){
 	__NOP();
 }
 
 int32_t MS5837_02BA_check_pressure(){
- 800135c:	e92d 43b0 	stmdb	sp!, {r4, r5, r7, r8, r9, lr}
- 8001360:	b082      	sub	sp, #8
- 8001362:	af02      	add	r7, sp, #8
+ 8001358:	e92d 43b0 	stmdb	sp!, {r4, r5, r7, r8, r9, lr}
+ 800135c:	b082      	sub	sp, #8
+ 800135e:	af02      	add	r7, sp, #8
 	//initializing D1 conversion
 	HAL_I2C_Master_Transmit(MS5837_hi2c, DEVICE_ADDR, &CONVERT_D1_COMM, COMMAND_LENGTH, HAL_MAX_DELAY);
- 8001364:	4b36      	ldr	r3, [pc, #216]	; (8001440 <MS5837_02BA_check_pressure+0xe4>)
- 8001366:	6818      	ldr	r0, [r3, #0]
- 8001368:	f04f 33ff 	mov.w	r3, #4294967295
- 800136c:	9300      	str	r3, [sp, #0]
- 800136e:	2301      	movs	r3, #1
- 8001370:	4a34      	ldr	r2, [pc, #208]	; (8001444 <MS5837_02BA_check_pressure+0xe8>)
- 8001372:	21ec      	movs	r1, #236	; 0xec
- 8001374:	f005 fe3e 	bl	8006ff4 <HAL_I2C_Master_Transmit>
+ 8001360:	4b36      	ldr	r3, [pc, #216]	; (800143c <MS5837_02BA_check_pressure+0xe4>)
+ 8001362:	6818      	ldr	r0, [r3, #0]
+ 8001364:	f04f 33ff 	mov.w	r3, #4294967295
+ 8001368:	9300      	str	r3, [sp, #0]
+ 800136a:	2301      	movs	r3, #1
+ 800136c:	4a34      	ldr	r2, [pc, #208]	; (8001440 <MS5837_02BA_check_pressure+0xe8>)
+ 800136e:	21ec      	movs	r1, #236	; 0xec
+ 8001370:	f005 fe40 	bl	8006ff4 <HAL_I2C_Master_Transmit>
 	HAL_Delay(20);
- 8001378:	2014      	movs	r0, #20
- 800137a:	f004 fdad 	bl	8005ed8 <HAL_Delay>
+ 8001374:	2014      	movs	r0, #20
+ 8001376:	f004 fdaf 	bl	8005ed8 <HAL_Delay>
 	//reading D1 data
 	HAL_I2C_Master_Transmit(MS5837_hi2c, DEVICE_ADDR, &ADC_READ_COMM, COMMAND_LENGTH, HAL_MAX_DELAY);
- 800137e:	4b30      	ldr	r3, [pc, #192]	; (8001440 <MS5837_02BA_check_pressure+0xe4>)
- 8001380:	6818      	ldr	r0, [r3, #0]
- 8001382:	f04f 33ff 	mov.w	r3, #4294967295
- 8001386:	9300      	str	r3, [sp, #0]
- 8001388:	2301      	movs	r3, #1
- 800138a:	4a2f      	ldr	r2, [pc, #188]	; (8001448 <MS5837_02BA_check_pressure+0xec>)
- 800138c:	21ec      	movs	r1, #236	; 0xec
- 800138e:	f005 fe31 	bl	8006ff4 <HAL_I2C_Master_Transmit>
+ 800137a:	4b30      	ldr	r3, [pc, #192]	; (800143c <MS5837_02BA_check_pressure+0xe4>)
+ 800137c:	6818      	ldr	r0, [r3, #0]
+ 800137e:	f04f 33ff 	mov.w	r3, #4294967295
+ 8001382:	9300      	str	r3, [sp, #0]
+ 8001384:	2301      	movs	r3, #1
+ 8001386:	4a2f      	ldr	r2, [pc, #188]	; (8001444 <MS5837_02BA_check_pressure+0xec>)
+ 8001388:	21ec      	movs	r1, #236	; 0xec
+ 800138a:	f005 fe33 	bl	8006ff4 <HAL_I2C_Master_Transmit>
 	HAL_I2C_Master_Receive(MS5837_hi2c, DEVICE_ADDR, adc_buff, ADC_LENGTH, HAL_MAX_DELAY);
- 8001392:	4b2b      	ldr	r3, [pc, #172]	; (8001440 <MS5837_02BA_check_pressure+0xe4>)
- 8001394:	6818      	ldr	r0, [r3, #0]
- 8001396:	f04f 33ff 	mov.w	r3, #4294967295
- 800139a:	9300      	str	r3, [sp, #0]
- 800139c:	2303      	movs	r3, #3
- 800139e:	4a2b      	ldr	r2, [pc, #172]	; (800144c <MS5837_02BA_check_pressure+0xf0>)
- 80013a0:	21ec      	movs	r1, #236	; 0xec
- 80013a2:	f005 ff1b 	bl	80071dc <HAL_I2C_Master_Receive>
+ 800138e:	4b2b      	ldr	r3, [pc, #172]	; (800143c <MS5837_02BA_check_pressure+0xe4>)
+ 8001390:	6818      	ldr	r0, [r3, #0]
+ 8001392:	f04f 33ff 	mov.w	r3, #4294967295
+ 8001396:	9300      	str	r3, [sp, #0]
+ 8001398:	2303      	movs	r3, #3
+ 800139a:	4a2b      	ldr	r2, [pc, #172]	; (8001448 <MS5837_02BA_check_pressure+0xf0>)
+ 800139c:	21ec      	movs	r1, #236	; 0xec
+ 800139e:	f005 ff1d 	bl	80071dc <HAL_I2C_Master_Receive>
 	D1 = (adc_buff[0] << 16) | (adc_buff[1] << 8) | (adc_buff[2]);
- 80013a6:	4b29      	ldr	r3, [pc, #164]	; (800144c <MS5837_02BA_check_pressure+0xf0>)
- 80013a8:	781b      	ldrb	r3, [r3, #0]
- 80013aa:	041a      	lsls	r2, r3, #16
- 80013ac:	4b27      	ldr	r3, [pc, #156]	; (800144c <MS5837_02BA_check_pressure+0xf0>)
- 80013ae:	785b      	ldrb	r3, [r3, #1]
- 80013b0:	021b      	lsls	r3, r3, #8
- 80013b2:	4313      	orrs	r3, r2
- 80013b4:	4a25      	ldr	r2, [pc, #148]	; (800144c <MS5837_02BA_check_pressure+0xf0>)
- 80013b6:	7892      	ldrb	r2, [r2, #2]
- 80013b8:	4313      	orrs	r3, r2
- 80013ba:	17da      	asrs	r2, r3, #31
- 80013bc:	4698      	mov	r8, r3
- 80013be:	4691      	mov	r9, r2
- 80013c0:	4b23      	ldr	r3, [pc, #140]	; (8001450 <MS5837_02BA_check_pressure+0xf4>)
- 80013c2:	e9c3 8900 	strd	r8, r9, [r3]
+ 80013a2:	4b29      	ldr	r3, [pc, #164]	; (8001448 <MS5837_02BA_check_pressure+0xf0>)
+ 80013a4:	781b      	ldrb	r3, [r3, #0]
+ 80013a6:	041a      	lsls	r2, r3, #16
+ 80013a8:	4b27      	ldr	r3, [pc, #156]	; (8001448 <MS5837_02BA_check_pressure+0xf0>)
+ 80013aa:	785b      	ldrb	r3, [r3, #1]
+ 80013ac:	021b      	lsls	r3, r3, #8
+ 80013ae:	4313      	orrs	r3, r2
+ 80013b0:	4a25      	ldr	r2, [pc, #148]	; (8001448 <MS5837_02BA_check_pressure+0xf0>)
+ 80013b2:	7892      	ldrb	r2, [r2, #2]
+ 80013b4:	4313      	orrs	r3, r2
+ 80013b6:	17da      	asrs	r2, r3, #31
+ 80013b8:	4698      	mov	r8, r3
+ 80013ba:	4691      	mov	r9, r2
+ 80013bc:	4b23      	ldr	r3, [pc, #140]	; (800144c <MS5837_02BA_check_pressure+0xf4>)
+ 80013be:	e9c3 8900 	strd	r8, r9, [r3]
 	//initializing D2 conversion
 	HAL_I2C_Master_Transmit(MS5837_hi2c, DEVICE_ADDR, &CONVERT_D2_COMM, COMMAND_LENGTH, HAL_MAX_DELAY);
- 80013c6:	4b1e      	ldr	r3, [pc, #120]	; (8001440 <MS5837_02BA_check_pressure+0xe4>)
- 80013c8:	6818      	ldr	r0, [r3, #0]
- 80013ca:	f04f 33ff 	mov.w	r3, #4294967295
- 80013ce:	9300      	str	r3, [sp, #0]
- 80013d0:	2301      	movs	r3, #1
- 80013d2:	4a20      	ldr	r2, [pc, #128]	; (8001454 <MS5837_02BA_check_pressure+0xf8>)
- 80013d4:	21ec      	movs	r1, #236	; 0xec
- 80013d6:	f005 fe0d 	bl	8006ff4 <HAL_I2C_Master_Transmit>
+ 80013c2:	4b1e      	ldr	r3, [pc, #120]	; (800143c <MS5837_02BA_check_pressure+0xe4>)
+ 80013c4:	6818      	ldr	r0, [r3, #0]
+ 80013c6:	f04f 33ff 	mov.w	r3, #4294967295
+ 80013ca:	9300      	str	r3, [sp, #0]
+ 80013cc:	2301      	movs	r3, #1
+ 80013ce:	4a20      	ldr	r2, [pc, #128]	; (8001450 <MS5837_02BA_check_pressure+0xf8>)
+ 80013d0:	21ec      	movs	r1, #236	; 0xec
+ 80013d2:	f005 fe0f 	bl	8006ff4 <HAL_I2C_Master_Transmit>
 	HAL_Delay(20);
- 80013da:	2014      	movs	r0, #20
- 80013dc:	f004 fd7c 	bl	8005ed8 <HAL_Delay>
+ 80013d6:	2014      	movs	r0, #20
+ 80013d8:	f004 fd7e 	bl	8005ed8 <HAL_Delay>
 	//reading D2 data
 	HAL_I2C_Master_Transmit(MS5837_hi2c, DEVICE_ADDR, &ADC_READ_COMM, COMMAND_LENGTH, HAL_MAX_DELAY);
- 80013e0:	4b17      	ldr	r3, [pc, #92]	; (8001440 <MS5837_02BA_check_pressure+0xe4>)
- 80013e2:	6818      	ldr	r0, [r3, #0]
- 80013e4:	f04f 33ff 	mov.w	r3, #4294967295
- 80013e8:	9300      	str	r3, [sp, #0]
- 80013ea:	2301      	movs	r3, #1
- 80013ec:	4a16      	ldr	r2, [pc, #88]	; (8001448 <MS5837_02BA_check_pressure+0xec>)
- 80013ee:	21ec      	movs	r1, #236	; 0xec
- 80013f0:	f005 fe00 	bl	8006ff4 <HAL_I2C_Master_Transmit>
+ 80013dc:	4b17      	ldr	r3, [pc, #92]	; (800143c <MS5837_02BA_check_pressure+0xe4>)
+ 80013de:	6818      	ldr	r0, [r3, #0]
+ 80013e0:	f04f 33ff 	mov.w	r3, #4294967295
+ 80013e4:	9300      	str	r3, [sp, #0]
+ 80013e6:	2301      	movs	r3, #1
+ 80013e8:	4a16      	ldr	r2, [pc, #88]	; (8001444 <MS5837_02BA_check_pressure+0xec>)
+ 80013ea:	21ec      	movs	r1, #236	; 0xec
+ 80013ec:	f005 fe02 	bl	8006ff4 <HAL_I2C_Master_Transmit>
 	HAL_I2C_Master_Receive(MS5837_hi2c, DEVICE_ADDR, adc_buff, ADC_LENGTH, HAL_MAX_DELAY);
- 80013f4:	4b12      	ldr	r3, [pc, #72]	; (8001440 <MS5837_02BA_check_pressure+0xe4>)
- 80013f6:	6818      	ldr	r0, [r3, #0]
- 80013f8:	f04f 33ff 	mov.w	r3, #4294967295
- 80013fc:	9300      	str	r3, [sp, #0]
- 80013fe:	2303      	movs	r3, #3
- 8001400:	4a12      	ldr	r2, [pc, #72]	; (800144c <MS5837_02BA_check_pressure+0xf0>)
- 8001402:	21ec      	movs	r1, #236	; 0xec
- 8001404:	f005 feea 	bl	80071dc <HAL_I2C_Master_Receive>
+ 80013f0:	4b12      	ldr	r3, [pc, #72]	; (800143c <MS5837_02BA_check_pressure+0xe4>)
+ 80013f2:	6818      	ldr	r0, [r3, #0]
+ 80013f4:	f04f 33ff 	mov.w	r3, #4294967295
+ 80013f8:	9300      	str	r3, [sp, #0]
+ 80013fa:	2303      	movs	r3, #3
+ 80013fc:	4a12      	ldr	r2, [pc, #72]	; (8001448 <MS5837_02BA_check_pressure+0xf0>)
+ 80013fe:	21ec      	movs	r1, #236	; 0xec
+ 8001400:	f005 feec 	bl	80071dc <HAL_I2C_Master_Receive>
 	D2 = (adc_buff[0] << 16) | (adc_buff[1] << 8) | (adc_buff[2]);
- 8001408:	4b10      	ldr	r3, [pc, #64]	; (800144c <MS5837_02BA_check_pressure+0xf0>)
- 800140a:	781b      	ldrb	r3, [r3, #0]
- 800140c:	041a      	lsls	r2, r3, #16
- 800140e:	4b0f      	ldr	r3, [pc, #60]	; (800144c <MS5837_02BA_check_pressure+0xf0>)
- 8001410:	785b      	ldrb	r3, [r3, #1]
- 8001412:	021b      	lsls	r3, r3, #8
- 8001414:	4313      	orrs	r3, r2
- 8001416:	4a0d      	ldr	r2, [pc, #52]	; (800144c <MS5837_02BA_check_pressure+0xf0>)
- 8001418:	7892      	ldrb	r2, [r2, #2]
- 800141a:	4313      	orrs	r3, r2
- 800141c:	17da      	asrs	r2, r3, #31
- 800141e:	461c      	mov	r4, r3
- 8001420:	4615      	mov	r5, r2
- 8001422:	4b0d      	ldr	r3, [pc, #52]	; (8001458 <MS5837_02BA_check_pressure+0xfc>)
- 8001424:	e9c3 4500 	strd	r4, r5, [r3]
+ 8001404:	4b10      	ldr	r3, [pc, #64]	; (8001448 <MS5837_02BA_check_pressure+0xf0>)
+ 8001406:	781b      	ldrb	r3, [r3, #0]
+ 8001408:	041a      	lsls	r2, r3, #16
+ 800140a:	4b0f      	ldr	r3, [pc, #60]	; (8001448 <MS5837_02BA_check_pressure+0xf0>)
+ 800140c:	785b      	ldrb	r3, [r3, #1]
+ 800140e:	021b      	lsls	r3, r3, #8
+ 8001410:	4313      	orrs	r3, r2
+ 8001412:	4a0d      	ldr	r2, [pc, #52]	; (8001448 <MS5837_02BA_check_pressure+0xf0>)
+ 8001414:	7892      	ldrb	r2, [r2, #2]
+ 8001416:	4313      	orrs	r3, r2
+ 8001418:	17da      	asrs	r2, r3, #31
+ 800141a:	461c      	mov	r4, r3
+ 800141c:	4615      	mov	r5, r2
+ 800141e:	4b0d      	ldr	r3, [pc, #52]	; (8001454 <MS5837_02BA_check_pressure+0xfc>)
+ 8001420:	e9c3 4500 	strd	r4, r5, [r3]
 	calculate();
- 8001428:	f000 f846 	bl	80014b8 <calculate>
+ 8001424:	f000 f848 	bl	80014b8 <calculate>
 	return presure-initial_pressure;
- 800142c:	4b0b      	ldr	r3, [pc, #44]	; (800145c <MS5837_02BA_check_pressure+0x100>)
- 800142e:	681a      	ldr	r2, [r3, #0]
- 8001430:	4b0b      	ldr	r3, [pc, #44]	; (8001460 <MS5837_02BA_check_pressure+0x104>)
- 8001432:	681b      	ldr	r3, [r3, #0]
- 8001434:	1ad3      	subs	r3, r2, r3
+ 8001428:	4b0b      	ldr	r3, [pc, #44]	; (8001458 <MS5837_02BA_check_pressure+0x100>)
+ 800142a:	681a      	ldr	r2, [r3, #0]
+ 800142c:	4b0b      	ldr	r3, [pc, #44]	; (800145c <MS5837_02BA_check_pressure+0x104>)
+ 800142e:	681b      	ldr	r3, [r3, #0]
+ 8001430:	1ad3      	subs	r3, r2, r3
 }
- 8001436:	4618      	mov	r0, r3
- 8001438:	46bd      	mov	sp, r7
- 800143a:	e8bd 83b0 	ldmia.w	sp!, {r4, r5, r7, r8, r9, pc}
- 800143e:	bf00      	nop
- 8001440:	2000012c 	.word	0x2000012c
- 8001444:	20000001 	.word	0x20000001
- 8001448:	20000130 	.word	0x20000130
- 800144c:	20000188 	.word	0x20000188
- 8001450:	20000170 	.word	0x20000170
- 8001454:	20000002 	.word	0x20000002
- 8001458:	20000178 	.word	0x20000178
- 800145c:	20000180 	.word	0x20000180
- 8001460:	20000184 	.word	0x20000184
+ 8001432:	4618      	mov	r0, r3
+ 8001434:	46bd      	mov	sp, r7
+ 8001436:	e8bd 83b0 	ldmia.w	sp!, {r4, r5, r7, r8, r9, pc}
+ 800143a:	bf00      	nop
+ 800143c:	2000012c 	.word	0x2000012c
+ 8001440:	20000001 	.word	0x20000001
+ 8001444:	20000130 	.word	0x20000130
+ 8001448:	20000188 	.word	0x20000188
+ 800144c:	20000170 	.word	0x20000170
+ 8001450:	20000002 	.word	0x20000002
+ 8001454:	20000178 	.word	0x20000178
+ 8001458:	20000180 	.word	0x20000180
+ 800145c:	20000184 	.word	0x20000184
 
-08001464 <MS5837_02BA_reset_pressure>:
+08001460 <MS5837_02BA_reset_pressure>:
 
 uint32_t MS5837_02BA_reset_pressure(){
- 8001464:	b580      	push	{r7, lr}
- 8001466:	b09a      	sub	sp, #104	; 0x68
- 8001468:	af00      	add	r7, sp, #0
+ 8001460:	b580      	push	{r7, lr}
+ 8001462:	b09a      	sub	sp, #104	; 0x68
+ 8001464:	af00      	add	r7, sp, #0
 	int32_t current_pressure[25];
 
 	for(int i =0;i<25;i++)
- 800146a:	2300      	movs	r3, #0
- 800146c:	667b      	str	r3, [r7, #100]	; 0x64
- 800146e:	e00b      	b.n	8001488 <MS5837_02BA_reset_pressure+0x24>
+ 8001466:	2300      	movs	r3, #0
+ 8001468:	667b      	str	r3, [r7, #100]	; 0x64
+ 800146a:	e00b      	b.n	8001484 <MS5837_02BA_reset_pressure+0x24>
 	{
 		current_pressure[i]=MS5837_02BA_check_pressure();
- 8001470:	f7ff ff74 	bl	800135c <MS5837_02BA_check_pressure>
- 8001474:	4602      	mov	r2, r0
- 8001476:	6e7b      	ldr	r3, [r7, #100]	; 0x64
- 8001478:	009b      	lsls	r3, r3, #2
- 800147a:	3368      	adds	r3, #104	; 0x68
- 800147c:	443b      	add	r3, r7
- 800147e:	f843 2c68 	str.w	r2, [r3, #-104]
+ 800146c:	f7ff ff74 	bl	8001358 <MS5837_02BA_check_pressure>
+ 8001470:	4602      	mov	r2, r0
+ 8001472:	6e7b      	ldr	r3, [r7, #100]	; 0x64
+ 8001474:	009b      	lsls	r3, r3, #2
+ 8001476:	3368      	adds	r3, #104	; 0x68
+ 8001478:	443b      	add	r3, r7
+ 800147a:	f843 2c68 	str.w	r2, [r3, #-104]
 	for(int i =0;i<25;i++)
- 8001482:	6e7b      	ldr	r3, [r7, #100]	; 0x64
- 8001484:	3301      	adds	r3, #1
- 8001486:	667b      	str	r3, [r7, #100]	; 0x64
- 8001488:	6e7b      	ldr	r3, [r7, #100]	; 0x64
- 800148a:	2b18      	cmp	r3, #24
- 800148c:	ddf0      	ble.n	8001470 <MS5837_02BA_reset_pressure+0xc>
+ 800147e:	6e7b      	ldr	r3, [r7, #100]	; 0x64
+ 8001480:	3301      	adds	r3, #1
+ 8001482:	667b      	str	r3, [r7, #100]	; 0x64
+ 8001484:	6e7b      	ldr	r3, [r7, #100]	; 0x64
+ 8001486:	2b18      	cmp	r3, #24
+ 8001488:	ddf0      	ble.n	800146c <MS5837_02BA_reset_pressure+0xc>
 	}
 	qsort(current_pressure, 25, sizeof(int32_t), cmp );
- 800148e:	4638      	mov	r0, r7
- 8001490:	4b07      	ldr	r3, [pc, #28]	; (80014b0 <MS5837_02BA_reset_pressure+0x4c>)
- 8001492:	2204      	movs	r2, #4
- 8001494:	2119      	movs	r1, #25
- 8001496:	f00e fed1 	bl	801023c <qsort>
+ 800148a:	4638      	mov	r0, r7
+ 800148c:	4b07      	ldr	r3, [pc, #28]	; (80014ac <MS5837_02BA_reset_pressure+0x4c>)
+ 800148e:	2204      	movs	r2, #4
+ 8001490:	2119      	movs	r1, #25
+ 8001492:	f00e fed3 	bl	801023c <qsort>
 	init_new_convertion();
- 800149a:	f7ff feb1 	bl	8001200 <init_new_convertion>
+ 8001496:	f7ff feb1 	bl	80011fc <init_new_convertion>
 	return initial_pressure = current_pressure[24];
- 800149e:	6e3b      	ldr	r3, [r7, #96]	; 0x60
- 80014a0:	4a04      	ldr	r2, [pc, #16]	; (80014b4 <MS5837_02BA_reset_pressure+0x50>)
- 80014a2:	6013      	str	r3, [r2, #0]
- 80014a4:	4b03      	ldr	r3, [pc, #12]	; (80014b4 <MS5837_02BA_reset_pressure+0x50>)
- 80014a6:	681b      	ldr	r3, [r3, #0]
+ 800149a:	6e3b      	ldr	r3, [r7, #96]	; 0x60
+ 800149c:	4a04      	ldr	r2, [pc, #16]	; (80014b0 <MS5837_02BA_reset_pressure+0x50>)
+ 800149e:	6013      	str	r3, [r2, #0]
+ 80014a0:	4b03      	ldr	r3, [pc, #12]	; (80014b0 <MS5837_02BA_reset_pressure+0x50>)
+ 80014a2:	681b      	ldr	r3, [r3, #0]
 }
- 80014a8:	4618      	mov	r0, r3
- 80014aa:	3768      	adds	r7, #104	; 0x68
- 80014ac:	46bd      	mov	sp, r7
- 80014ae:	bd80      	pop	{r7, pc}
- 80014b0:	08000fed 	.word	0x08000fed
- 80014b4:	20000184 	.word	0x20000184
+ 80014a4:	4618      	mov	r0, r3
+ 80014a6:	3768      	adds	r7, #104	; 0x68
+ 80014a8:	46bd      	mov	sp, r7
+ 80014aa:	bd80      	pop	{r7, pc}
+ 80014ac:	08000fed 	.word	0x08000fed
+ 80014b0:	20000184 	.word	0x20000184
+ 80014b4:	00000000 	.word	0x00000000
 
 080014b8 <calculate>:
 
@@ -3885,7 +3887,7 @@ void HAL_I2C_MasterRxCpltCallback(I2C_HandleTypeDef *hi2c) {
  80022a6:	6078      	str	r0, [r7, #4]
 	MS5837_I2C_MasterRxCplt(hi2c);
  80022a8:	6878      	ldr	r0, [r7, #4]
- 80022aa:	f7fe ffbd 	bl	8001228 <MS5837_I2C_MasterRxCplt>
+ 80022aa:	f7fe ffbb 	bl	8001224 <MS5837_I2C_MasterRxCplt>
 }
  80022ae:	bf00      	nop
  80022b0:	3708      	adds	r7, #8
@@ -3901,7 +3903,7 @@ void HAL_I2C_MasterTxCpltCallback(I2C_HandleTypeDef *hi2c) {
  80022bc:	6078      	str	r0, [r7, #4]
 	MS5837_I2C_MasterTxCplt(hi2c);
  80022be:	6878      	ldr	r0, [r7, #4]
- 80022c0:	f7ff f802 	bl	80012c8 <MS5837_I2C_MasterTxCplt>
+ 80022c0:	f7ff f800 	bl	80012c4 <MS5837_I2C_MasterTxCplt>
 }
  80022c4:	bf00      	nop
  80022c6:	3708      	adds	r7, #8
@@ -7560,7 +7562,7 @@ void func_tSensCommTask(void const * argument)
  8003d04:	d165      	bne.n	8003dd2 <func_tSensCommTask+0xee>
 //      MS5837_read(i2cBus[DEV_I2C].hi2c);
     	rSensors.pressure_raw = MS5837_02BA_get_actual_pressure();
- 8003d06:	f7fd fa31 	bl	800116c <MS5837_02BA_get_actual_pressure>
+ 8003d06:	f7fd fa2f 	bl	8001168 <MS5837_02BA_get_actual_pressure>
  8003d0a:	4603      	mov	r3, r0
  8003d0c:	4a3b      	ldr	r2, [pc, #236]	; (8003dfc <func_tSensCommTask+0x118>)
  8003d0e:	6593      	str	r3, [r2, #88]	; 0x58
@@ -7648,7 +7650,7 @@ void func_tSensCommTask(void const * argument)
  8003dda:	d905      	bls.n	8003de8 <func_tSensCommTask+0x104>
     {
     	MS5837_02BA_reinit();
- 8003ddc:	f7fd f96c 	bl	80010b8 <MS5837_02BA_reinit>
+ 8003ddc:	f7fd f96a 	bl	80010b4 <MS5837_02BA_reinit>
     	rSensors.pressure_watchdog_counter = 0;
  8003de0:	4b06      	ldr	r3, [pc, #24]	; (8003dfc <func_tSensCommTask+0x118>)
  8003de2:	2200      	movs	r2, #0
@@ -8440,7 +8442,7 @@ int main(void)
  80042bc:	4808      	ldr	r0, [pc, #32]	; (80042e0 <main+0x58>)
  80042be:	f7fc fea5 	bl	800100c <MS5837_02BA_init>
   MS5837_02BA_reset_pressure();
- 80042c2:	f7fd f8cf 	bl	8001464 <MS5837_02BA_reset_pressure>
+ 80042c2:	f7fd f8cd 	bl	8001460 <MS5837_02BA_reset_pressure>
 
   movingAverageInit(&pressure_filter, 50);
  80042c6:	2132      	movs	r1, #50	; 0x32
