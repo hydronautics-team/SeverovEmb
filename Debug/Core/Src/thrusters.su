@@ -1,6 +1,6 @@
-../Core/Src/thrusters.c:42:6:thrustersInit	16	static
-../Core/Src/thrusters.c:64:6:resetThrusters	16	static
-../Core/Src/thrusters.c:79:6:fillThrustersRequest	32	static
-../Core/Src/thrusters.c:110:6:fillThrustersResponse	32	static
-../Core/Src/thrusters.c:126:6:formThrustVectors	72	static
-../Core/Src/thrusters.c:176:8:resizeFloatToInt8	24	static
+../Core/Src/thrusters.c:45:6:thrustersInit	16	static
+../Core/Src/thrusters.c:67:6:resetThrusters	16	static
+../Core/Src/thrusters.c:82:6:fillThrustersRequest	32	static
+../Core/Src/thrusters.c:113:6:fillThrustersResponse	32	static
+../Core/Src/thrusters.c:129:6:formThrustVectors	88	static
+../Core/Src/thrusters.c:214:8:resizeFloatToInt8	24	static
