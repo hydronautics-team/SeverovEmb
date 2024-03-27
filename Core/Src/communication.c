@@ -691,6 +691,9 @@ void ShoreResponse(uint8_t *responseBuf)
     res.pitch = rSensors.pitch;
     res.yaw =  rSensors.yaw;//*rStabState[STAB_YAW].posSignal;//rSensors.yaw;
 
+    res.accelX = rSensors.accelX;
+    res.accelY = rSensors.accelY;
+
     res.pressure = rSensors.pressure;
     res.dropper = 0;
     res.grabber = 0;
@@ -774,13 +777,13 @@ int16_t sign(int16_t in)
 void ImuReceive(uint8_t *ReceiveBuf)
 {
 	 // Check sync byte
-	 if ((ReceiveBuf[0] != 0xFA)||(ReceiveBuf[1] != 0x01)||(ReceiveBuf[2] != 0x28)||(ReceiveBuf[3] != 0x00))
+	 if ((ReceiveBuf[0] != 0xFA)||(ReceiveBuf[1] != 0x01)||(ReceiveBuf[2] != 0x28)||(ReceiveBuf[3] != 0x01))
 	 {
 		 ++uartBus[IMU_UART].brokenRxCounter;
 		 return;
 	 }
 
-	 rSensors.crc = (ReceiveBuf[28] << 8) | ReceiveBuf[29];
+	 rSensors.crc = (ReceiveBuf[IMU_RESPONSE_LENGTH-2] << 8) | ReceiveBuf[IMU_RESPONSE_LENGTH-1];
 	 //crc length= IMU_RESPONSE_LENGTH - 1 sync byte - 2 bytes crc
 	 uint16_t calculated_crc = calculateCRC(ReceiveBuf + 1, IMU_RESPONSE_LENGTH - 1 - 2);
 //	 if (rSensors.crc != calculated_crc)
@@ -798,10 +801,10 @@ void ImuReceive(uint8_t *ReceiveBuf)
   	  memcpy(&rSensors.rollSpeed, ReceiveBuf + 16, sizeof(rSensors.rollSpeed));
   	  memcpy(&rSensors.pitchSpeed, ReceiveBuf + 20, sizeof(rSensors.pitchSpeed));
   	  memcpy(&rSensors.yawSpeed, ReceiveBuf + 24, sizeof(rSensors.yawSpeed));
-//
-//  	  memcpy(&rSensors.accelX, ReceiveBuf + 28, sizeof(rSensors.accelX));
-//  	  memcpy(&rSensors.accelY, ReceiveBuf + 32, sizeof(rSensors.accelY));
-//  	  memcpy(&rSensors.accelZ, ReceiveBuf + 36, sizeof(rSensors.accelZ));
+
+  	  memcpy(&rSensors.accelX, ReceiveBuf + 28, sizeof(rSensors.accelX));
+  	  memcpy(&rSensors.accelY, ReceiveBuf + 32, sizeof(rSensors.accelY));
+  	  memcpy(&rSensors.accelZ, ReceiveBuf + 36, sizeof(rSensors.accelZ));
 
     rSensors.LastTick = xTaskGetTickCount();
 

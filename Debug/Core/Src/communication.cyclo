@@ -16,8 +16,8 @@
 ../Core/Src/communication.c:600:6:ShoreConfigRequest	4
 ../Core/Src/communication.c:654:6:ShoreDirectRequest	5
 ../Core/Src/communication.c:686:6:ShoreResponse	1
-../Core/Src/communication.c:708:6:ShoreConfigResponse	1
-../Core/Src/communication.c:750:6:ShoreDirectResponse	1
-../Core/Src/communication.c:763:9:sign	3
-../Core/Src/communication.c:774:6:ImuReceive	5
-../Core/Src/communication.c:812:16:calculateCRC	2
+../Core/Src/communication.c:711:6:ShoreConfigResponse	1
+../Core/Src/communication.c:753:6:ShoreDirectResponse	1
+../Core/Src/communication.c:766:9:sign	3
+../Core/Src/communication.c:777:6:ImuReceive	5
+../Core/Src/communication.c:815:16:calculateCRC	2

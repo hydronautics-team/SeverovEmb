@@ -233,13 +233,16 @@ struct shoreResponseDirect_s
 	uint16_t checksum;
 };
 
-#define SHORE_RESPONSE_LENGTH			20
+#define SHORE_RESPONSE_LENGTH			28
 
 struct shoreResponse_s
 {
     float roll;
     float pitch;
     float yaw;
+
+    float accelX;
+    float accelY;
 
     float pressure;
 
@@ -299,7 +302,7 @@ enum ShoreRequestModes {
 /* --- IMU package and parsing info  --- */
 #define IMU_REQUEST_LENGTH_AC 20 // size of transmit package
 #define IMU_REQUEST_LENGTH 27
-#define IMU_RESPONSE_LENGTH 30 // size of receive package
+#define IMU_RESPONSE_LENGTH 42 // size of receive package
 
 struct imuResponse_s
 {
