@@ -16,6 +16,8 @@
 #include "communication.h"
 #include "checksum.h"
 
+//#define THRUSTERS_MAX 80
+#define ABS(a) (a<0?-a:a)
 
 void addMarchToSumm(float *velocity);
 void addLagToSumm(float *velocity);
@@ -25,6 +27,7 @@ void addRollToSumm(float *velocity);
 void addPitchToSumm(float *velocity);
 
 uint8_t thruster_init = 0;
+uint8_t thrusters_max = 70;
 
 
 int8_t resizeFloatToInt8(float input);
@@ -166,23 +169,43 @@ void formThrustVectors()
 		U[i] = rStabState[i].outputSignal;
   }
 
-  float thrusters_sum = 0;
-  float lag_march_sum = 0;
+  float reduction_a = 1;
+  float reduction_b = 1;
+  float velocity_max_hor = 0;
+  float velocity_max_ver = 0;
 
   for (uint8_t i = 0; i < THRUSTERS_NUMBER; ++i)
   {
-    velocity[i] = KVMA[i][0]*U[STAB_MARCH] + KVMA[i][1]*U[STAB_LAG] + KVMA[i][2]*U[STAB_DEPTH]
-         + KVMA[i][3]*U[STAB_YAW] + KVMA[i][4]*U[STAB_ROLL];
-    thrusters_sum += resizeFloatToInt8(velocity[i]);
-    lag_march_sum += resizeFloatToInt8(KVMA[i][0]*U[STAB_MARCH] + KVMA[i][1]*U[STAB_LAG]);
+	velocity[i] = KVMA[i][0]*U[STAB_MARCH] + KVMA[i][1]*U[STAB_LAG] + KVMA[i][3]*U[STAB_YAW]
+		+ KVMA[i][2]*U[STAB_DEPTH] + KVMA[i][4]*U[STAB_ROLL];
+	if(i==1 || i==4)
+	{
+		if(velocity_max_ver < ABS(velocity[i]))
+		{
+			velocity_max_ver = ABS(velocity[i]);
+		}
+	}
+	else
+	{
+		if(velocity_max_hor < ABS(velocity[i]))
+		{
+			velocity_max_hor = ABS(velocity[i]);
+		}
+	}
   }
-
-  float reduction = 1 - (thrusters_sum-THRUSTERS_NUMBER*80)/lag_march_sum;
-
-  if(reduction > 0)
-	  for (uint8_t i = 0; i < THRUSTERS_NUMBER; ++i)
-	      velocity[i] = reduction*(KVMA[i][0]*U[STAB_MARCH] + KVMA[i][1]*U[STAB_LAG]) + KVMA[i][2]*U[STAB_DEPTH]
-	           + KVMA[i][3]*U[STAB_YAW] + KVMA[i][4]*U[STAB_ROLL];
+  if(velocity_max_hor>thrusters_max)
+  {
+	  reduction_a *= thrusters_max/velocity_max_hor;
+  }
+  if(velocity_max_ver>thrusters_max)
+  {
+	  reduction_b *= thrusters_max/velocity_max_ver;
+  }
+  for (uint8_t i = 0; i < THRUSTERS_NUMBER; ++i)
+  {
+  	velocity[i] = reduction_a*(KVMA[i][0]*U[STAB_MARCH] + KVMA[i][1]*U[STAB_LAG] + KVMA[i][3]*U[STAB_YAW])
+  		+ reduction_b*(KVMA[i][2]*U[STAB_DEPTH] + KVMA[i][4]*U[STAB_ROLL]);
+  }
 
   for (uint8_t i = 0; i < THRUSTERS_NUMBER; ++i)
 	rThrusters[i].desiredSpeed = resizeFloatToInt8(velocity[i]);

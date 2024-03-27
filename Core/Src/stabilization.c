@@ -105,8 +105,8 @@ void stabilizationInit()
 	rStabConstants[STAB_YAW].pid.iMax = 90;
 	rStabConstants[STAB_YAW].pid.iMin = -90;
 	rStabConstants[STAB_YAW].pThrustersCast = 45;
-	rStabConstants[STAB_YAW].pThrustersMax = 90;
-	rStabConstants[STAB_YAW].pThrustersMin = -90;
+	rStabConstants[STAB_YAW].pThrustersMax = 2000;
+	rStabConstants[STAB_YAW].pThrustersMin = -2000;
 	rStabConstants[STAB_YAW].sOutSummatorMax = 32000;
 	rStabConstants[STAB_YAW].sOutSummatorMin = -32000;
     rStabConstants[STAB_YAW].joyIntegration = false;
@@ -124,8 +124,8 @@ void stabilizationInit()
 	rStabConstants[STAB_DEPTH].pid.iMax = 90;
 	rStabConstants[STAB_DEPTH].pid.iMin = -90;
 	rStabConstants[STAB_DEPTH].pThrustersCast = 0.3;
-	rStabConstants[STAB_DEPTH].pThrustersMax = 90;
-	rStabConstants[STAB_DEPTH].pThrustersMin = -90;
+	rStabConstants[STAB_DEPTH].pThrustersMax = 2000;
+	rStabConstants[STAB_DEPTH].pThrustersMin = -2000;
 	rStabConstants[STAB_DEPTH].sOutSummatorMax = 32000;
 	rStabConstants[STAB_DEPTH].sOutSummatorMin = -32000;
     rStabConstants[STAB_DEPTH].joyIntegration = false;
@@ -142,8 +142,8 @@ void stabilizationInit()
 	rStabConstants[STAB_ROLL].pid.iMax = 50;
 	rStabConstants[STAB_ROLL].pid.iMin = -50;
 	rStabConstants[STAB_ROLL].pThrustersCast = 40;
-	rStabConstants[STAB_ROLL].pThrustersMax = 90;
-	rStabConstants[STAB_ROLL].pThrustersMin = -90;
+	rStabConstants[STAB_ROLL].pThrustersMax = 2000;
+	rStabConstants[STAB_ROLL].pThrustersMin = -2000;
 	rStabConstants[STAB_ROLL].sOutSummatorMax = 32000;
 	rStabConstants[STAB_ROLL].sOutSummatorMin = -32000;
     rStabConstants[STAB_ROLL].joyIntegration = false;
