@@ -299,7 +299,7 @@ enum ShoreRequestModes {
 /* --- IMU package and parsing info  --- */
 #define IMU_REQUEST_LENGTH_AC 20 // size of transmit package
 #define IMU_REQUEST_LENGTH 27
-#define IMU_RESPONSE_LENGTH 30 // size of receive package
+#define IMU_RESPONSE_LENGTH 42 // size of receive package
 
 struct imuResponse_s
 {
